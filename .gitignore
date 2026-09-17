@@ -7,3 +7,9 @@ apk/
 # Le fichier de mapping R8 ne se publie JAMAIS : il permet de desobfusquer
 # l APK a quiconque le telecharge.
 mapping/
+
+# Les videos de demonstration ne se publient pas ici.
+videos/
+
+# Etat local de l'outillage.
+.omc/
