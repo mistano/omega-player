@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDK plugin — Omega Player</title>
+<style>
+  :root {
+    --fond: #fbfaf8;  --encre: #23201d;  --doux: #6b645d;
+    --trait: #e3ded7;  --code-fond: #f2efea;  --accent: #b4541f;
+    --note-fond: #fdf6ec;  --note-trait: #e0a15c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fond: #17161a;  --encre: #e8e4de;  --doux: #9b948c;
+      --trait: #302d33;  --code-fond: #201e24;  --accent: #e08a4c;
+      --note-fond: #241d16;  --note-trait: #8a5f2c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto; padding: 2.5rem 1.25rem 5rem; max-width: 47rem;
+    background: var(--fond); color: var(--encre);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  h1 { font-size: 1.85rem; line-height: 1.2; margin: 0 0 .3rem; letter-spacing: -.02em; }
+  h2 {
+    font-size: 1.3rem; margin: 3rem 0 .9rem; padding-top: 1.4rem;
+    border-top: 1px solid var(--trait); letter-spacing: -.01em;
+  }
+  h3 { font-size: 1.05rem; margin: 2rem 0 .6rem; }
+  p, li { margin: .7rem 0; }
+  .chapeau { color: var(--doux); margin-bottom: 2rem; }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .875em; background: var(--code-fond);
+    padding: .12em .38em; border-radius: 4px;
+  }
+  pre {
+    background: var(--code-fond); border: 1px solid var(--trait);
+    border-radius: 7px; padding: .9rem 1.1rem; overflow-x: auto; line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; font-size: .84rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1.1rem 0; font-size: .9rem; }
+  th, td {
+    text-align: left; padding: .5rem .6rem;
+    border-bottom: 1px solid var(--trait); vertical-align: top;
+  }
+  th { font-weight: 600; color: var(--doux); font-size: .8rem;
+       text-transform: uppercase; letter-spacing: .04em; }
+  td code { white-space: nowrap; }
+  .note {
+    background: var(--note-fond); border-left: 3px solid var(--note-trait);
+    padding: .85rem 1.1rem; margin: 1.3rem 0; border-radius: 0 6px 6px 0;
+  }
+  .note p:first-child { margin-top: 0; }
+  .note p:last-child { margin-bottom: 0; }
+  strong { font-weight: 650; }
+  em.opt { color: var(--accent); font-style: normal; font-weight: 650; }
+  ol { padding-left: 1.3rem; }
+  footer { margin-top: 3.5rem; padding-top: 1.2rem;
+           border-top: 1px solid var(--trait); color: var(--doux); font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<h1>SDK plugin Omega Player</h1>
+<p class="chapeau">
+  Ce dossier a été exporté par l'application : <strong>Paramètres → Plugins →
+  Exporter le SDK du plugin</strong>.
+</p>
+
+<table>
+  <tr><th>Fichier</th><th>À quoi il sert</th></tr>
+  <tr><td><code>media_plugin.py</code></td><td>Le squelette à remplir. C'est votre plugin.</td></tr>
+  <tr><td><code>manifest.json</code></td><td>L'identité du plugin. À zipper avec.</td></tr>
+  <tr><td><code>media_bridge.py</code></td><td>Le pont côté application, pour référence. <strong>À ne pas zipper.</strong></td></tr>
+  <tr><td><code>README.html</code></td><td>Ce fichier.</td></tr>
+</table>
+
+<pre><code># … écrire les fonctions dans media_plugin.py …
+zip -r mon-plugin.zip media_plugin.py manifest.json   # + vos dépendances</code></pre>
+
+<p>Import : <strong>Paramètres → Plugins → Importer</strong>, puis choisir le zip.</p>
+
+<h2>Ce que l'application attend</h2>
+
+<p>
+  Un plugin est un module Python nommé <code>media_plugin</code>, chargé
+  dynamiquement depuis <code>filesDir/plugins/&lt;id&gt;/</code>. L'application ne
+  lui parle que par <code>media_bridge.py</code>, fourni à côté, qui appelle les
+  fonctions par leur nom.
+</p>
+
+<table>
+  <tr><th>Fonction</th><th>Signature</th><th>Capacité</th></tr>
+  <tr><td><code>search</code></td><td><code>(query: str, max_results: int = 20, offset: int = 0) -&gt; str</code></td><td>source</td></tr>
+  <tr><td><code>stream_info</code></td><td><code>(url: str) -&gt; str</code></td><td>source</td></tr>
+  <tr><td><code>related</code></td><td><code>(source_id: str, max_results: int = 10) -&gt; str</code></td><td>source</td></tr>
+  <tr><td><code>playlist_meta</code></td><td><code>(url: str, max_items: int = 200) -&gt; str</code></td><td>source</td></tr>
+  <tr><td><code>fetch_audio</code></td><td><code>(url: str, out_dir: str) -&gt; str</code></td><td>source</td></tr>
+  <tr><td><code>fetch_playlist</code></td><td><code>(url: str, out_dir: str, max_items: int = 200) -&gt; str</code></td><td>source</td></tr>
+  <tr><td><code>recognize</code></td><td><code>(pcm: bytes, sample_rate: int) -&gt; str</code></td><td><em class="opt">optionnelle</em></td></tr>
+</table>
+
+<p>Trois règles valent pour toutes :</p>
+<ol>
+  <li>
+    <strong>Retourner une chaîne JSON</strong>, jamais un dict. Le pont passe la
+    valeur telle quelle à <code>new JSONObject(…)</code> côté Java.
+  </li>
+  <li>
+    <strong>Ne jamais lever.</strong> Une exception qui traverse Chaquopy remonte
+    en crash. Une erreur se retourne : <code>{"error": "message lisible"}</code>,
+    et les fonctions de liste ajoutent <code>"results": []</code> pour que
+    l'appelant puisse itérer sans test.
+  </li>
+  <li>
+    <strong>Bibliothèque standard uniquement</strong>, sauf à zipper vos
+    dépendances à côté de <code>media_plugin.py</code> — le dossier du plugin est
+    ajouté à <code>sys.path</code>, rien n'est installé par pip sur l'appareil.
+  </li>
+</ol>
+
+<h3>Les capacités ne sont pas déclarées, elles sont déduites</h3>
+
+<p>
+  <code>media_bridge.plugin_status()</code> fait
+  <code>callable(getattr(p, "recognize", None))</code>. Définir la fonction
+  l'active, la supprimer la désactive. Le tableau <code>capabilities</code> de
+  <code>manifest.json</code> est <strong>documentaire</strong> : rien ne s'active
+  en l'écrivant. Côté Java, <code>PluginManager.sait("recognize")</code> relit ce
+  que <code>plugin_status()</code> a déduit, et c'est cette réponse qui commande
+  l'interface.
+</p>
+
+<p>
+  Sans <code>recognize</code>, les boutons micro restent visibles et cliquables :
+  ils répondent que le plugin actif ne fait pas de reconnaissance et proposent
+  d'aller en installer un autre. Le refus arrive avant le dialogue de consentement
+  et avant la demande de permission micro — l'utilisateur n'enregistre jamais
+  douze secondes pour rien.
+</p>
+
+<h2>Forme d'une piste</h2>
+
+<p>Toutes les listes renvoient ce dict (helper <code>_track()</code> dans le squelette) :</p>
+
+<pre><code>{
+  "videoId":      "identifiant stable, clé de dédup et de cache vignette",
+  "title":        "Titre",
+  "channelName":  "Artiste ou chaîne",
+  "durationMs":   185000,
+  "duration":     "3:05",
+  "description":  "300 caractères max",
+  "thumbnailUrl": "https://…",
+  "url":          "URL canonique, ou videoId à défaut"
+}</code></pre>
+
+<p>
+  <code>videoId</code> doit rester stable dans le temps : il sert de clé de
+  déduplication, de clé de cache de vignette, et d'identifiant de téléchargement
+  (<code>dl_&lt;videoId&gt;</code> côté Android Auto et Wear).
+</p>
+
+<h3>Retours par fonction</h3>
+
+<pre><code>search        {"results": [piste], "offset": int, "total_fetched": int}
+stream_info   piste à plat
+              | {"_type": "playlist", "id", "title", "videoCount", "results": [piste]}
+related       {"results": [piste]}
+playlist_meta {"title": str, "results": [piste]}
+fetch_audio   {"filePath", "videoId", "title", "channelName",
+               "durationMs", "description", "ext"}
+fetch_playlist{"playlistTitle": str, "results": [fetch_audio],
+               "errors": [{"videoId", "error"}]}
+recognize     réponse brute du service : {"matches": [...], "track": {...}}</code></pre>
+
+<p>
+  <code>fetch_audio</code> : <code>filePath</code> doit exister quand la fonction
+  retourne, l'application l'importe immédiatement. Écrivez les tags dans le
+  fichier si le format le permet — l'application ne le fait pas.
+</p>
+
+<h2>La reconnaissance musicale</h2>
+
+<p>
+  <strong>L'application ne calcule rien.</strong> Elle capte environ 12 s au micro
+  et vous passe le son brut : <code>pcm</code> est un <code>bytes</code> de PCM
+  mono, entiers 16 bits signés, little-endian, à <code>sample_rate</code> Hz
+  (16000 aujourd'hui — lisez le paramètre plutôt que de l'écrire en dur).
+  Relecture sans copie :
+</p>
+
+<pre><code>samples = np.frombuffer(pcm, dtype='&lt;i2')</code></pre>
+
+<p>
+  Empreinte, format binaire, service interrogé : tout vous appartient. C'est
+  volontaire — l'application ne doit rien présumer de votre méthode, pour qu'en
+  changer ne demande pas une mise à jour de l'application. Une mise à jour
+  d'application passe par la revue du store ; un plugin ne passe par rien.
+</p>
+
+<div class="note">
+  <p>
+    <strong>NumPy est disponible.</strong> Il est embarqué dans l'APK et
+    importable depuis un plugin — contrairement à toute dépendance native que vous
+    zipperiez vous-même, qu'Android refuse de charger depuis un répertoire
+    inscriptible. Servez-vous en : 1500 FFT de 2048 points prennent environ 0,7 s
+    avec, et des dizaines de secondes sans.
+  </p>
+</div>
+
+<div class="note">
+  <p>
+    <strong>Vous recevez du son capté au micro.</strong> Il peut contenir autre
+    chose que de la musique : une conversation, une télévision, du silence. Ne
+    l'écrivez pas sur le disque, ne le transmettez pas tel quel, et n'envoyez au
+    réseau que ce que la reconnaissance exige. C'est la pièce de quelqu'un.
+  </p>
+</div>
+
+<p>
+  L'application lit <code>track.title</code>, <code>track.subtitle</code> et
+  <code>track.images.coverarthq</code> (repli <code>coverart</code>), et n'accepte
+  le résultat que si <code>matches</code> est non vide.
+</p>
+
+<h2>manifest.json</h2>
+
+<pre><code>{
+  "plugin_version": "0.1.0",
+  "capabilities": ["source"],
+  "dependencies": {},
+  "built_at": "1970-01-01T00:00:00+00:00"
+}</code></pre>
+
+<div class="note">
+  <p>
+    <strong><code>plugin_version</code> est l'identité du plugin</strong>, pas une
+    décoration : l'application en dérive le dossier d'installation
+    (<code>plugins/plugin_&lt;version&gt;</code>). Conséquence directe — si vous
+    modifiez le code sans changer la version, le dossier existe déjà et
+    l'application <strong>ne ré-extrait pas</strong> votre zip. Incrémentez à
+    chaque build.
+  </p>
+</div>
+
+<p>
+  Les autres clés ne sont lues par personne aujourd'hui. <code>capabilities</code>
+  sert la lecture humaine et l'écran Plugins à venir ; gardez-le juste par
+  honnêteté.
+</p>
+
+<h2>Erreurs fréquentes</h2>
+
+<table>
+  <tr><th>Symptôme</th><th>Cause</th></tr>
+  <tr><td>Le plugin s'importe mais rien ne change</td><td>Version non incrémentée — l'ancien dossier est réutilisé</td></tr>
+  <tr><td>Le bouton micro dit « pas de reconnaissance »</td><td>Pas de <code>def recognize</code> dans le module actif</td></tr>
+  <tr><td>Crash à la recherche</td><td>Une fonction a levé, ou a retourné un dict au lieu d'une chaîne</td></tr>
+  <tr><td>Résultats vides sans erreur</td><td><code>offset</code> ignoré : la page 2 renvoie la page 1, l'application la déduplique</td></tr>
+  <tr><td>Le morceau se télécharge mais n'apparaît pas</td><td><code>filePath</code> pointe sur un fichier absent ou encore en cours d'écriture</td></tr>
+</table>
+
+<p>Logs utiles :</p>
+
+<pre><code>adb logcat -s PluginManager:I python.stdout:I python.stderr:W MusicRecognitionManager:W</code></pre>
+
+<footer>
+  Un plugin est du code que vous distribuez et dont vous répondez. L'application
+  ne le vérifie pas, ne l'approuve pas, et le dit à qui l'installe.
+</footer>
+
+</body>
+</html>
