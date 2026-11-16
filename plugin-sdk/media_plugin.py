@@ -1,366 +1,222 @@
 # =============================================================================
-#  media_plugin.py — OmegaPlayer Plugin Template
+#  media_plugin.py - Omega Player extension template
 #
-#  This file is the entry point of your plugin.
-#  It must be placed at the ROOT of your ZIP (not inside a subfolder).
+#  This file is the entry point of your extension. Put it at the ROOT of your
+#  ZIP, next to manifest.json. README.html (exported with it) is the full guide.
 #
-#  REQUIRED functions (called by media_bridge.py):
-#    - search(query, max_results, offset)  → str (JSON)
-#    - stream_info(url)                    → str (JSON)
-#    - fetch_audio(url, out_dir)           → str (JSON)
-#    - playlist_meta(url)                  → str (JSON)
+#  As shipped, it is a working, offline DEMO SOURCE: three fictional tracks,
+#  searchable, with a settings page. Import it as is to see every part of the
+#  contract in action, then replace the catalogue with your own service.
 #
-#  OPTIONAL functions (improve the experience):
-#    - related(source_id, max_results)     → str (JSON)
-#    - fetch_playlist(url, out_dir)        → str (JSON)
-#    - recognize(pcm, sample_rate)         → str (JSON)   see the bottom of this file
+#  Search source - all four or none (the app refuses to load a partial source):
+#    search(query, max_results=20, offset=0)
+#    stream_info(url)
+#    fetch_audio(url, out_dir)
+#    playlist_meta(url, max_items=200)
+#  Optional:
+#    related(source_id, max_results=10)
+#    fetch_playlist(url, out_dir, max_items=200)
+#    recognize(pcm, sample_rate)         (see the end of this file)
+#    pages()                             (settings and free pages)
 #
-#  CAPABILITIES ARE DETECTED, NOT DECLARED.
-#  media_bridge.plugin_status() does callable(getattr(plugin, "recognize", None)).
-#  Defining the function enables music recognition in the app; removing it
-#  disables it cleanly. The "capabilities" array in manifest.json is
-#  documentation only — the Java side reads "plugin_version" and nothing else.
+#  Capabilities are DETECTED: the app checks callable(getattr(module, name)).
+#  Define a function and the capability exists; remove it and it is gone.
 #
-#  manifest.json ships NEXT TO this file and its "plugin_version" IS the
-#  plugin identity: the app installs into plugins/plugin_<version>/ and will
-#  NOT re-extract a version it already has. Bump it on every build.
+#  Return a JSON string or a dict / list (the bridge serialises it). On failure
+#  return {"error": "readable message"}. An exception does not crash the app:
+#  the bridge catches it and shows "extension_error" with its type and message.
 #
-#  Return type: always a JSON string.
-#  On error:    {"error": "descriptive message"}
-#
-#  Dependencies: place your third-party libraries inside the ZIP next to this
-#  file — they will be automatically available via sys.path.
-#
-#  To publish your plugin: name your GitHub repository with the prefix
-#  omega-player-plugin (e.g. omega-player-plugin-soundcloud)
+#  Injected by the app BEFORE this file runs (do not define them yourself):
+#    extension_id            your id, from manifest.json
+#    data_dir()              creates and returns <your folder>/data: the only
+#                            place to write. Kept on re-import, erased on delete.
+#    reglage(cle, defaut)    reads one value saved by your settings page
 # =============================================================================
 
 import json
-import logging
 import os
-import sys
 
-# ── Path setup ────────────────────────────────────────────────────────────────
-# Allows importing modules placed in the same folder as this file.
-_self_path = os.path.dirname(__file__)
-if _self_path not in sys.path:
-    sys.path.insert(0, _self_path)
+# ── Demo catalogue (replace with your service) ───────────────────────────────
 
-# ── Logger ────────────────────────────────────────────────────────────────────
-def _log(msg: str):
-    logging.getLogger("media_plugin").warning(msg)
+_PLAYLIST_ID = "demo-playlist"
+_BASE_URL = "https://example.com/demo/"
 
 
-# ── Dependency check ──────────────────────────────────────────────────────────
-def _check():
-    """
-    Verify that your dependencies are available.
-    Raise a RuntimeError with a clear message if a library is missing.
-    """
-    # Example:
-    # try:
-    #     import my_library
-    # except ImportError as e:
-    #     raise RuntimeError(f"Missing dependency: {e}")
-    pass
-
-
-# ── Metadata injection (optional but recommended) ─────────────────────────────
-def _inject_metadata(file_path: str, title: str, artist: str, thumb_url: str):
-    """
-    Inject title, artist and cover art into the downloaded audio file.
-    Implement this function if you want metadata to appear correctly
-    in the OmegaPlayer library.
-
-    Formats supported with mutagen (no ffmpeg required):
-      .m4a / .mp4  → MP4Cover (covr atom)
-      .mp3         → ID3 APIC frame
-      .flac        → VorbisComment + Picture block
-      .opus        → OggOpus + Picture (base64)
-      .webm        → EBML text tags only, cover saved as sidecar .jpg
-
-    You can use an official OmegaPlayer plugin as a reference implementation.
-    """
-    pass  # TODO: implement if needed
-
-
-# =============================================================================
-#  REQUIRED PUBLIC FUNCTIONS
-# =============================================================================
-
-def search(query: str, max_results: int = 40, offset: int = 0) -> str:
-    """
-    Search for tracks matching `query`.
-
-    Parameters:
-        query       : text entered by the user
-        max_results : maximum number of results to return
-        offset      : pagination — start index in the result set
-
-    Expected JSON return (success):
-    {
-        "results": [
-            {
-                "videoId":      "unique_identifier",   <- used by stream_info / fetch_audio
-                "title":        "Track title",
-                "channelName":  "Artist or channel name",
-                "durationMs":   210000,                <- duration in milliseconds (0 if unknown)
-                "duration":     "3:30",                <- formatted duration (optional)
-                "thumbnailUrl": "https://...",         <- thumbnail URL
-                "url":          "https://...",         <- track page URL
-                "description":  "..."                  <- optional, max 300 chars
-            },
-            ...
-        ],
-        "offset": 0,
-        "total_fetched": 40
-    }
-
-    Expected JSON return (error):
-    {"error": "message", "results": []}
-    """
-    _check()
-    try:
-        # TODO: implement search against your source
-        results = []
-        return json.dumps({"results": results, "offset": offset, "total_fetched": len(results)})
-    except Exception as ex:
-        _log(f"search error: {ex}")
-        return json.dumps({"error": str(ex), "results": []})
-
-
-def stream_info(url: str) -> str:
-    """
-    Resolve a URL and return track or playlist information.
-
-    Case 1 — Single track:
-    {
-        "videoId":      "unique_identifier",
-        "title":        "Track title",
-        "channelName":  "Artist",
-        "durationMs":   210000,
-        "thumbnailUrl": "https://...",
-        "url":          "https://...",
-        "description":  "..."
-    }
-
-    Case 2 — Playlist / collection:
-    {
-        "_type":       "playlist",
-        "id":          "playlist_identifier",
-        "title":       "Playlist name",
-        "channelName": "Author",
-        "videoCount":  42,
-        "results":     [ ... ]   <- same format as search result items
-    }
-
-    Playlist vs single track detection is your responsibility.
-    Expected JSON return (error): {"error": "message"}
-    """
-    _check()
-    try:
-        # TODO: resolve the URL and return track/playlist info
-        return json.dumps({"error": "stream_info not implemented"})
-    except Exception as ex:
-        _log(f"stream_info error: {ex}")
-        return json.dumps({"error": str(ex)})
-
-
-def fetch_audio(url: str, out_dir: str, max_retries: int = 10) -> str:
-    """
-    Download the audio file for `url` into `out_dir`.
-    Inject metadata into the file after downloading.
-
-    Parameters:
-        url         : track URL (webpage or direct stream)
-        out_dir     : destination folder (create it if missing)
-        max_retries : number of attempts on network failure
-
-    Expected JSON return (success):
-    {
-        "filePath":    "/absolute/path/to/file.m4a",
-        "videoId":     "unique_identifier",
-        "title":       "Track title",
-        "channelName": "Artist",
-        "durationMs":  210000,
-        "description": "...",
-        "ext":         "m4a"
-    }
-
-    Expected JSON return (error): {"error": "message"}
-
-    Recommended formats (preference order, no ffmpeg needed):
-      m4a > mp4 > mp3 > webm (last resort)
-    """
-    _check()
-    os.makedirs(out_dir, exist_ok=True)
-    try:
-        # TODO: download the file and return its info
-        return json.dumps({"error": "fetch_audio not implemented"})
-    except Exception as ex:
-        _log(f"fetch_audio error: {ex}")
-        return json.dumps({"error": str(ex)})
-
-
-def playlist_meta(url: str, max_items: int = 2000) -> str:
-    """
-    Fetch playlist metadata without downloading any audio files.
-    Used by OmegaPlayer to display a preview and trigger imports.
-
-    Parameters:
-        url       : playlist URL
-        max_items : maximum number of tracks to return
-
-    Expected JSON return (success):
-    {
-        "id":          "playlist_identifier",
-        "title":       "Playlist name",
-        "channelName": "Author",
-        "videoCount":  42,
-        "results": [
-            {
-                "videoId":      "...",
-                "title":        "...",
-                "channelName":  "...",
-                "durationMs":   0,
-                "thumbnailUrl": "...",
-                "url":          "..."
-            },
-            ...
-        ]
-    }
-
-    Expected JSON return (error): {"error": "message"}
-    """
-    _check()
-    try:
-        # TODO: fetch playlist metadata from your source
-        return json.dumps({"error": "playlist_meta not implemented"})
-    except Exception as ex:
-        _log(f"playlist_meta error: {ex}")
-        return json.dumps({"error": str(ex)})
-
-
-# =============================================================================
-#  OPTIONAL FUNCTIONS
-# =============================================================================
-
-def related(source_id: str, max_results: int = 10) -> str:
-    """
-    [OPTIONAL] Return tracks similar to source_id.
-    If not implemented, OmegaPlayer will silently ignore this function.
-
-    Expected JSON return: same format as search -> {"results": [...]}
-    """
-    return json.dumps({"results": []})
-
-
-def fetch_playlist(url: str, out_dir: str, max_items: int = 200) -> str:
-    """
-    [OPTIONAL] Download all tracks in a playlist.
-    Default implementation: calls playlist_meta + fetch_audio in a loop.
-    Override this if you have a more efficient batch method.
-
-    Expected JSON return:
-    {
-        "playlistTitle": "...",
-        "results": [ ... ],   <- successfully downloaded tracks
-        "errors":  [ ... ]    <- {"videoId": "...", "error": "..."}
-    }
-    """
-    meta = json.loads(playlist_meta(url, max_items))
-    if "error" in meta:
-        return json.dumps({"error": meta["error"], "results": [], "errors": []})
-
-    results, errors = [], []
-    for entry in meta.get("results", []):
-        vid = entry.get("videoId", "")
-        if not vid:
-            continue
-        r = json.loads(fetch_audio(entry.get("url", vid), out_dir))
-        if "error" in r:
-            errors.append({"videoId": vid, "error": r["error"]})
-        else:
-            results.append(r)
-
-    return json.dumps({
-        "playlistTitle": meta.get("title", ""),
-        "results": results,
-        "errors":  errors,
-    })
-
-
-# =============================================================================
-#  UTILITIES (copy, adapt or replace based on your data source)
-# =============================================================================
-
-def _fmt(seconds) -> str:
-    """Format a duration in seconds to 'M:SS' or 'H:MM:SS'."""
-    if not seconds:
-        return "--:--"
-    s = int(seconds)
-    m, s = divmod(s, 60)
-    if m >= 60:
-        h, m = divmod(m, 60)
-        return f"{h}:{m:02d}:{s:02d}"
-    return f"{m}:{s:02d}"
-
-
-def _to_dict(entry: dict, detail: bool = False) -> dict:
-    """
-    Normalize a raw dict (from your API / scraper) into an OmegaPlayer dict.
-    Adapt the field names to match your data source.
-    """
-    track_id = entry.get("id", "") or entry.get("videoId", "")
-    duration = entry.get("duration") or entry.get("duration_ms", 0) / 1000
-    thumb    = entry.get("thumbnail") or entry.get("thumbnailUrl", "")
-
+def _track(source_id, title, artist, duration_s, url, thumbnail=""):
+    """One track, in the shape every list of the contract uses."""
+    duration_s = int(duration_s or 0)
+    minutes, seconds = divmod(duration_s, 60)
     return {
-        "videoId":      track_id,
-        "title":        entry.get("title", ""),
-        "channelName":  entry.get("artist") or entry.get("channel") or entry.get("uploader", ""),
-        "durationMs":   int(duration * 1000),
-        "duration":     _fmt(duration),
-        "thumbnailUrl": thumb,
-        "url":          entry.get("url") or entry.get("webpage_url", ""),
-        "description":  (entry.get("description") or "")[:300],
+        "sourceId": source_id,            # stable: dedup key, cache key, download id
+        "title": title,
+        "artist": artist,
+        "durationMs": duration_s * 1000,
+        "duration": "%d:%02d" % (minutes, seconds) if duration_s else "",
+        "thumbnailUrl": thumbnail,        # "" when you have none
+        "url": url,
+        "description": "",
     }
 
 
+_CATALOGUE = [
+    _track("demo-1", "Morning Lines", "The Placeholder Trio", 184, _BASE_URL + "demo-1"),
+    _track("demo-2", "Static Garden", "Example Ensemble", 221, _BASE_URL + "demo-2"),
+    _track("demo-3", "Quiet Index", "The Placeholder Trio", 197, _BASE_URL + "demo-3"),
+]
+
+
+def _find(url_or_id):
+    """The app passes either a sourceId (download of a search result) or a URL."""
+    for track in _CATALOGUE:
+        if url_or_id in (track["sourceId"], track["url"]):
+            return track
+    return None
+
+
+# ── Small cache in data_dir() ────────────────────────────────────────────────
+
+def _cache_path():
+    return os.path.join(data_dir(), "recent_searches.json")
+
+
+def _read_recent():
+    try:
+        with open(_cache_path(), "r", encoding="utf-8") as f:
+            recent = json.load(f)
+    except (OSError, ValueError):
+        return []
+    return recent if isinstance(recent, list) else []
+
+
+def _remember(query):
+    recent = [q for q in _read_recent() if q != query]
+    recent.insert(0, query)
+    with open(_cache_path(), "w", encoding="utf-8") as f:
+        json.dump(recent[:10], f)
+
+
+# ── Search source ────────────────────────────────────────────────────────────
+
+def search(query, max_results=20, offset=0):
+    """{"results": [track], "offset": int, "total_fetched": int}"""
+    q = (query or "").strip().lower()
+    match_artist = reglage("match_artist", True)
+    only_artist = (reglage("only_artist", "") or "").strip().lower()
+
+    found = []
+    for track in _CATALOGUE:
+        if only_artist and track["artist"].lower() != only_artist:
+            continue
+        text = track["title"].lower()
+        if match_artist:
+            text += " " + track["artist"].lower()
+        if q in text:
+            found.append(dict(track))   # a copy: the bridge adds legacy keys
+
+    if q:
+        _remember(query.strip())
+    page = found[offset:offset + max_results]
+    return {"results": page, "offset": offset, "total_fetched": len(page)}
+
+
+def stream_info(url):
+    """A single track, or a collection: {"_type": "playlist", ...}."""
+    if url in (_PLAYLIST_ID, _BASE_URL + _PLAYLIST_ID):
+        meta = playlist_meta(url)
+        meta["_type"] = "playlist"
+        return meta
+    track = _find(url)
+    if track is None:
+        return {"error": "Unknown demo track: %s" % url}
+    return dict(track)
+
+
+def playlist_meta(url, max_items=200):
+    """Collection metadata, without downloading anything."""
+    if url not in (_PLAYLIST_ID, _BASE_URL + _PLAYLIST_ID):
+        return {"error": "Unknown demo playlist: %s" % url}
+    tracks = [dict(t) for t in _CATALOGUE[:max_items]]
+    return {
+        "id": _PLAYLIST_ID,
+        "title": "Demo playlist",
+        "artist": "Omega Player SDK",
+        "trackCount": len(tracks),
+        "results": tracks,
+    }
+
+
+def fetch_audio(url, out_dir):
+    """Download one track into out_dir.
+
+    A real source writes the file, then returns:
+        {"filePath": "<absolute path, complete on return>", "sourceId": ...,
+         "title": ..., "artist": ..., "durationMs": ..., "description": ...,
+         "format": "m4a"}
+    The demo catalogue has no audio, so this is the clear error the app shows.
+    """
+    if _find(url) is None:
+        return {"error": "Unknown demo track: %s" % url}
+    return {"error": "The demo source has no audio. Replace the catalogue with your own service."}
+
+
+# ── Settings page ────────────────────────────────────────────────────────────
+# Keys of the page contract are French on purpose (titre, elements, cle,
+# libelle, defaut...): see the glossary in README.html.
+
+def pages():
+    recent = _read_recent()
+    return [{
+        "id": "settings",
+        "titre": {"en": "Demo source", "fr": "Source de démonstration"},
+        "elements": [
+            {"type": "message",
+             "texte": {"en": "Last searches: %s" % (", ".join(recent) or "none"),
+                       "fr": "Dernières recherches : %s" % (", ".join(recent) or "aucune")}},
+            {"type": "texte", "cle": "only_artist",
+             "libelle": {"en": "Only this artist", "fr": "Seulement cet artiste"},
+             "aide": {"en": "Leave empty to search everything.",
+                      "fr": "Vide : tout le catalogue."}},
+            {"type": "interrupteur", "cle": "match_artist", "defaut": True,
+             "libelle": {"en": "Also match artist names",
+                         "fr": "Chercher aussi dans les artistes"}},
+            {"type": "bouton", "action": "clear_recent",
+             "libelle": {"en": "Clear recent searches",
+                         "fr": "Effacer les dernières recherches"}},
+        ],
+    }]
+
+
+def clear_recent(reglages):
+    """Button action: receives the saved settings, returns a message."""
+    try:
+        os.remove(_cache_path())
+    except FileNotFoundError:
+        pass
+    return {"message": {"en": "Recent searches cleared.",
+                        "fr": "Dernières recherches effacées."},
+            "rafraichir": True}
+
+
 # =============================================================================
-#  OPTIONAL CAPABILITY: "recognize" — identify what is playing in the room
+#  OPTIONAL: recognize(pcm, sample_rate) - identify what is playing in the room
 # =============================================================================
-#  Define this function and the app's microphone buttons start working. Leave it
-#  out and they explain that the active plugin does not do recognition. Nothing
-#  else to switch on.
+#  Define it and the app's microphone buttons can use this extension.
 #
-#  THE APP DOES NO AUDIO PROCESSING AT ALL. It records ~12 s from the microphone
-#  and hands you the raw samples. Everything after that is yours: fingerprint (or
-#  not), format, service, network. That is deliberate — it means you can change
-#  algorithm or provider by shipping a new plugin, with no app update.
+#    pcm          raw PCM, mono, signed 16-bit little-endian, no header
+#                 (numpy: np.frombuffer(pcm, dtype="<i2"))
+#    sample_rate  samples per second (16000 today): read it, do not assume it
 #
-#  def recognize(pcm: bytes, sample_rate: int) -> str:
+#  Return only the result:
+#    {"title": "...", "artist": "...", "artworkUrl": "https://..."}  (artworkUrl optional)
+#    {"match": None}                                                 nothing recognised
+#    {"error": "..."}                                                failure
 #
-#    pcm          raw PCM, mono, signed 16-bit little-endian, no header.
-#                 Decode with: np.frombuffer(pcm, dtype='<i2')
-#    sample_rate  samples per second, currently 16000. Read it, do not assume it.
+#  This is microphone audio from someone's room. It may hold a conversation, a
+#  television or silence. Do not store it, do not forward it as is, and send
+#  over the network only what recognition requires.
 #
-#  Returns a JSON string. On success, whatever shape your service produces — the
-#  app looks for "matches" and "track" {title, subtitle, images}. On failure,
-#  json.dumps({"error": "network", "message": "..."}).
-#
-#  NumPy is available: the app bundles it precisely so that a plugin can do real
-#  signal processing. Import it normally. Note that a plugin ZIP can NEVER carry
-#  compiled extensions — since Android 10 the app may not load native code from a
-#  directory it can write to — so NumPy, requests and beautifulsoup4 are what you
-#  get natively. Pure-Python packages you may ship next to this file.
-#
-#  What you receive is microphone audio. It may contain no music at all: a
-#  conversation, a television, silence. Return no match rather than a guess, and
-#  keep in mind that it is somebody's room you are sending somewhere.
-#
-# def recognize(pcm: bytes, sample_rate: int) -> str:
+# def recognize(pcm, sample_rate):
 #     import numpy as np
-#     samples = np.frombuffer(pcm, dtype='<i2')
+#     samples = np.frombuffer(pcm, dtype="<i2")
 #     ...
-#     return json.dumps({"matches": [], "track": {}})
+#     return {"match": None}

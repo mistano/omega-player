@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SDK plugin — Omega Player</title>
+<title>Omega Player extension SDK</title>
 <style>
   :root {
     --fond: #fbfaf8;  --encre: #23201d;  --doux: #6b645d;
@@ -31,6 +31,7 @@
   }
   h3 { font-size: 1.05rem; margin: 2rem 0 .6rem; }
   p, li { margin: .7rem 0; }
+  a { color: var(--accent); }
   .chapeau { color: var(--doux); margin-bottom: 2rem; }
   code {
     font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -42,6 +43,7 @@
     border-radius: 7px; padding: .9rem 1.1rem; overflow-x: auto; line-height: 1.5;
   }
   pre code { background: none; padding: 0; font-size: .84rem; }
+  .table { overflow-x: auto; }
   table { border-collapse: collapse; width: 100%; margin: 1.1rem 0; font-size: .9rem; }
   th, td {
     text-align: left; padding: .5rem .6rem;
@@ -58,219 +60,536 @@
   .note p:last-child { margin-bottom: 0; }
   strong { font-weight: 650; }
   em.opt { color: var(--accent); font-style: normal; font-weight: 650; }
-  ol { padding-left: 1.3rem; }
+  ol, ul { padding-left: 1.3rem; }
+  nav ol { columns: 2; column-gap: 2rem; margin: 0; }
+  nav li { margin: .25rem 0; }
+  @media (max-width: 34rem) { nav ol { columns: 1; } }
   footer { margin-top: 3.5rem; padding-top: 1.2rem;
            border-top: 1px solid var(--trait); color: var(--doux); font-size: .85rem; }
 </style>
 </head>
 <body>
 
-<h1>SDK plugin Omega Player</h1>
+<h1>Omega Player extension SDK</h1>
 <p class="chapeau">
-  Ce dossier a été exporté par l'application : <strong>Paramètres → Plugins →
-  Exporter le SDK du plugin</strong>.
+  Exported by the app from <strong>Settings › Extensions › Export the extension SDK</strong>.
+  An extension adds a search source, music recognition, settings pages, or any mix of the three.
 </p>
 
-<table>
-  <tr><th>Fichier</th><th>À quoi il sert</th></tr>
-  <tr><td><code>media_plugin.py</code></td><td>Le squelette à remplir. C'est votre plugin.</td></tr>
-  <tr><td><code>manifest.json</code></td><td>L'identité du plugin. À zipper avec.</td></tr>
-  <tr><td><code>media_bridge.py</code></td><td>Le pont côté application, pour référence. <strong>À ne pas zipper.</strong></td></tr>
-  <tr><td><code>README.html</code></td><td>Ce fichier.</td></tr>
-</table>
+<div class="table"><table>
+  <tr><th>File</th><th>What it is</th></tr>
+  <tr><td><code>media_plugin.py</code></td><td>The template: a working offline demo source with a settings page. This is your extension.</td></tr>
+  <tr><td><code>manifest.json</code></td><td>Its identity: <code>id</code>, name, version. Zip it with the code.</td></tr>
+  <tr><td><code>media_bridge.py</code></td><td>The app's side of the contract, for reference. <strong>Do not zip it.</strong></td></tr>
+  <tr><td><code>README.html</code></td><td>This guide.</td></tr>
+</table></div>
 
-<pre><code># … écrire les fonctions dans media_plugin.py …
-zip -r mon-plugin.zip media_plugin.py manifest.json   # + vos dépendances</code></pre>
+<pre><code># edit media_plugin.py and manifest.json, then:
+zip -r my_extension.zip media_plugin.py manifest.json   # + your own pure-Python modules</code></pre>
 
-<p>Import : <strong>Paramètres → Plugins → Importer</strong>, puis choisir le zip.</p>
+<p>Import: <strong>Settings › Extensions › Import an extension (.zip)</strong>. The template
+works as shipped: import it unchanged first, search for “garden”, open its page.</p>
 
-<h2>Ce que l'application attend</h2>
+<nav>
+  <ol>
+    <li><a href="#security">Overview and security</a></li>
+    <li><a href="#several">Several extensions</a></li>
+    <li><a href="#files">Files and dependencies</a></li>
+    <li><a href="#manifest">manifest.json</a></li>
+    <li><a href="#contract">Media contract</a></li>
+    <li><a href="#errors">Errors</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#recognition">Music recognition</a></li>
+    <li><a href="#pages">Pages and actions</a></li>
+    <li><a href="#glossary">Glossary of contract keys</a></li>
+    <li><a href="#mistakes">Common mistakes</a></li>
+  </ol>
+</nav>
 
-<p>
-  Un plugin est un module Python nommé <code>media_plugin</code>, chargé
-  dynamiquement depuis <code>filesDir/plugins/&lt;id&gt;/</code>. L'application ne
-  lui parle que par <code>media_bridge.py</code>, fourni à côté, qui appelle les
-  fonctions par leur nom.
-</p>
-
-<table>
-  <tr><th>Fonction</th><th>Signature</th><th>Capacité</th></tr>
-  <tr><td><code>search</code></td><td><code>(query: str, max_results: int = 20, offset: int = 0) -&gt; str</code></td><td>source</td></tr>
-  <tr><td><code>stream_info</code></td><td><code>(url: str) -&gt; str</code></td><td>source</td></tr>
-  <tr><td><code>related</code></td><td><code>(source_id: str, max_results: int = 10) -&gt; str</code></td><td>source</td></tr>
-  <tr><td><code>playlist_meta</code></td><td><code>(url: str, max_items: int = 200) -&gt; str</code></td><td>source</td></tr>
-  <tr><td><code>fetch_audio</code></td><td><code>(url: str, out_dir: str) -&gt; str</code></td><td>source</td></tr>
-  <tr><td><code>fetch_playlist</code></td><td><code>(url: str, out_dir: str, max_items: int = 200) -&gt; str</code></td><td>source</td></tr>
-  <tr><td><code>recognize</code></td><td><code>(pcm: bytes, sample_rate: int) -&gt; str</code></td><td><em class="opt">optionnelle</em></td></tr>
-</table>
-
-<p>Trois règles valent pour toutes :</p>
-<ol>
-  <li>
-    <strong>Retourner une chaîne JSON</strong>, jamais un dict. Le pont passe la
-    valeur telle quelle à <code>new JSONObject(…)</code> côté Java.
-  </li>
-  <li>
-    <strong>Ne jamais lever.</strong> Une exception qui traverse Chaquopy remonte
-    en crash. Une erreur se retourne : <code>{"error": "message lisible"}</code>,
-    et les fonctions de liste ajoutent <code>"results": []</code> pour que
-    l'appelant puisse itérer sans test.
-  </li>
-  <li>
-    <strong>Bibliothèque standard uniquement</strong>, sauf à zipper vos
-    dépendances à côté de <code>media_plugin.py</code> — le dossier du plugin est
-    ajouté à <code>sys.path</code>, rien n'est installé par pip sur l'appareil.
-  </li>
-</ol>
-
-<h3>Les capacités ne sont pas déclarées, elles sont déduites</h3>
+<h2 id="security">1. Overview and security</h2>
 
 <p>
-  <code>media_bridge.plugin_status()</code> fait
-  <code>callable(getattr(p, "recognize", None))</code>. Définir la fonction
-  l'active, la supprimer la désactive. Le tableau <code>capabilities</code> de
-  <code>manifest.json</code> est <strong>documentaire</strong> : rien ne s'active
-  en l'écrivant. Côté Java, <code>PluginManager.sait("recognize")</code> relit ce
-  que <code>plugin_status()</code> a déduit, et c'est cette réponse qui commande
-  l'interface.
+  An extension is a Python 3.11 module, <code>media_plugin.py</code>, that the app loads
+  inside its own process. <strong>It runs with the same rights as the app</strong>: network,
+  storage, everything the app can do. Nothing sandboxes it.
 </p>
 
 <p>
-  Sans <code>recognize</code>, les boutons micro restent visibles et cliquables :
-  ils répondent que le plugin actif ne fait pas de reconnaissance et proposent
-  d'aller en installer un autre. Le refus arrive avant le dialogue de consentement
-  et avant la demande de permission micro — l'utilisateur n'enregistre jamais
-  douze secondes pour rien.
+  That is why nothing runs without a gesture from the user. Importing a zip opens a
+  confirmation dialog showing the name, the version (old → new on an update, with a warning
+  when the new one is older) and the <strong>SHA-256 fingerprint</strong> of the code. The
+  fingerprint covers every file of the extension except <code>data/</code> and
+  <code>__pycache__/</code>, and the app checks it again at every start.
 </p>
 
-<h2>Forme d'une piste</h2>
+<div class="table"><table>
+  <tr><th>State</th><th>Meaning</th><th>Loaded?</th></tr>
+  <tr><td>Enabled</td><td>Confirmed by the user, switched on. Any number can be.</td><td>yes</td></tr>
+  <tr><td>Disabled</td><td>Confirmed, switched off. Keeps its settings and <code>data/</code>.</td><td>no</td></tr>
+  <tr><td>Pending</td><td>The folder appeared without the user importing it (dropped by another extension, for instance).</td><td>no, until <strong>Review</strong></td></tr>
+  <tr><td>Changed</td><td>The code differs from what the user confirmed.</td><td>no, until <strong>Review</strong></td></tr>
+  <tr><td>Invalid</td><td>No <code>media_plugin.py</code> in the folder.</td><td>no</td></tr>
+</table></div>
 
-<p>Toutes les listes renvoient ce dict (helper <code>_track()</code> dans le squelette) :</p>
+<p>
+  <strong>Review</strong> shows the same dialog as an import. Re-importing an extension
+  replaces its code and <strong>keeps its <code>data/</code> folder</strong>.
+  <strong>Delete</strong> erases the whole folder, <code>data/</code> included; tracks already
+  added to the library stay.
+</p>
+
+<div class="note">
+  <p>
+    Never write into your own code folder. A file written there changes the fingerprint, and
+    at the next start the app refuses to load the extension until the user reviews it. Write
+    in <code>data_dir()</code>.
+  </p>
+</div>
+
+<h2 id="several">2. Several extensions</h2>
+
+<ul>
+  <li>
+    <strong>Search source</strong>: one at a time, among the enabled extensions that define
+    <code>search</code>. The user picks it from the chips at the top of the Search tab.
+  </li>
+  <li>
+    <strong>Music recognition</strong>: one at a time, among the enabled extensions that define
+    <code>recognize</code>, chosen on the “Music recognition” row of Settings › Extensions. By
+    default: the search source if it can recognise, else the first enabled one that can.
+  </li>
+  <li>
+    <strong>Provenance</strong>: every search result remembers the extension that produced it.
+    Opening or downloading that track goes back to <em>that</em> extension (the bridge calls
+    <code>stream_info</code> / <code>fetch_audio</code> with <code>ext=&lt;its id&gt;</code>),
+    even after the user switched to another source. If it has been disabled or deleted, the
+    download fails with a clear message; the app never falls back to another extension.
+  </li>
+</ul>
+
+<h2 id="files">3. Files and dependencies</h2>
+
+<pre><code>files/plugins/&lt;id&gt;/                 your code, as imported (only an import or Review changes it)
+files/plugins/&lt;id&gt;/media_plugin.py
+files/plugins/&lt;id&gt;/manifest.json
+files/plugins/&lt;id&gt;/data/            data_dir(): everything you write
+files/plugins/&lt;id&gt;/data/reglages.json   values of your settings pages, written by the app</code></pre>
+
+<p>Before your code runs, the bridge injects three names into your module:</p>
+
+<div class="table"><table>
+  <tr><th>Name</th><th>What it does</th></tr>
+  <tr><td><code>extension_id</code></td><td>Your id (a string).</td></tr>
+  <tr><td><code>data_dir()</code></td><td>Creates and returns <code>&lt;your folder&gt;/data</code>. Kept on re-import, erased on delete, excluded from the fingerprint.</td></tr>
+  <tr><td><code>reglage(cle, defaut=None)</code></td><td>Reads one value of <code>data/reglages.json</code>, fresh at every call.</td></tr>
+</table></div>
+
+<ul>
+  <li>
+    <strong>One interpreter for all extensions.</strong> Your module is loaded as
+    <code>ext_&lt;id&gt;</code> and your folder is put on <code>sys.path</code>, so your own
+    modules import normally — but they share one namespace with every other extension. Give
+    them unique names (<code>my_extension_api.py</code>, or a package named after your id):
+    two extensions shipping a <code>utils.py</code> hide each other.
+  </li>
+  <li>
+    <code>__pycache__</code> folders are deleted before every load and no bytecode is written:
+    only the verified <code>.py</code> files run.
+  </li>
+  <li>
+    <strong>Bundled with the app</strong>: <code>requests</code>, <code>beautifulsoup4</code>,
+    <code>numpy</code>. Import them normally. Anything else must be <strong>pure Python</strong>,
+    zipped next to <code>media_plugin.py</code>; nothing is installed with pip on the device.
+    If two extensions bundle the same library in two versions, only one is loaded.
+  </li>
+  <li>
+    <strong>No native code.</strong> Since Android 10 an app may not load compiled code
+    (<code>.so</code>, binary wheels) from a folder it can write to. NumPy is bundled precisely
+    so you can do real signal processing anyway.
+  </li>
+</ul>
+
+<h2 id="manifest">4. manifest.json</h2>
 
 <pre><code>{
-  "videoId":      "identifiant stable, clé de dédup et de cache vignette",
-  "title":        "Titre",
-  "channelName":  "Artiste ou chaîne",
+  "id": "my_extension",
+  "nom": {"en": "My extension", "fr": "Mon extension"},
+  "version": "0.1.0"
+}</code></pre>
+
+<div class="table"><table>
+  <tr><th>Key</th><th>Meaning</th></tr>
+  <tr><td><code>id</code></td><td><strong>The identity of the extension</strong>: its folder, its module name, the key of its settings and of its tracks' provenance. Letters, digits, <code>_</code> and <code>-</code>; anything else becomes <code>_</code>; 64 characters at most. Never change it between versions.</td></tr>
+  <tr><td><code>nom</code> (or <code>name</code>)</td><td>Display name: a string, or <code>{"en": …, "fr": …}</code>; the app picks its own language, else English, else the first entry.</td></tr>
+  <tr><td><code>version</code> (or <code>plugin_version</code>)</td><td>Shown in the confirmation dialog and on the extension's row. Free text; bump it on every release so users can tell versions apart.</td></tr>
+</table></div>
+
+<p>
+  Set <code>id</code>. Without it the app falls back on the zip's file name, and a user who
+  renames the zip (<code>my_extension (1).zip</code>) installs a second copy instead of
+  updating the first. With an <code>id</code>, the file name does not matter.
+</p>
+<p>
+  Any other key, including a <code>capabilities</code> array, is documentation only: the app
+  does not read it.
+</p>
+
+<h2 id="contract">5. Media contract</h2>
+
+<p>Signatures, exactly as the bridge calls them:</p>
+
+<div class="table"><table>
+  <tr><th>Function</th><th>Signature</th><th>Status</th></tr>
+  <tr><td><code>search</code></td><td><code>search(query, max_results=20, offset=0)</code></td><td>makes the extension a <strong>search source</strong></td></tr>
+  <tr><td><code>stream_info</code></td><td><code>stream_info(url)</code></td><td>required with <code>search</code></td></tr>
+  <tr><td><code>fetch_audio</code></td><td><code>fetch_audio(url, out_dir)</code></td><td>required with <code>search</code></td></tr>
+  <tr><td><code>playlist_meta</code></td><td><code>playlist_meta(url, max_items=200)</code></td><td>required with <code>search</code></td></tr>
+  <tr><td><code>related</code></td><td><code>related(source_id, max_results=10)</code></td><td><em class="opt">optional</em> (not called by the app today)</td></tr>
+  <tr><td><code>fetch_playlist</code></td><td><code>fetch_playlist(url, out_dir, max_items=200)</code></td><td><em class="opt">optional</em> (not called by the app today)</td></tr>
+  <tr><td><code>recognize</code></td><td><code>recognize(pcm, sample_rate)</code></td><td><em class="opt">optional</em>, see <a href="#recognition">§ 8</a></td></tr>
+  <tr><td><code>pages</code></td><td><code>pages()</code></td><td><em class="opt">optional</em>, see <a href="#pages">§ 9</a></td></tr>
+</table></div>
+
+<p>
+  An extension that defines <code>search</code> but not the three others fails to load, and
+  its row says which function is missing. An extension without <code>search</code> is fine:
+  it can offer only recognition, or only pages.
+</p>
+
+<p>
+  <strong>The <code>url</code> argument</strong> of <code>stream_info</code> and
+  <code>fetch_audio</code> is either a link the user pasted or a <code>sourceId</code>:
+  downloading a search result passes its <code>sourceId</code>. Accept both.
+</p>
+
+<h3>A track</h3>
+
+<p>Every list uses this object (helper <code>_track()</code> in the template):</p>
+
+<pre><code>{
+  "sourceId":     "stable id: dedup key, thumbnail cache key, download id",
+  "title":        "Title",
+  "artist":       "Artist",
   "durationMs":   185000,
   "duration":     "3:05",
-  "description":  "300 caractères max",
+  "description":  "300 characters at most",
   "thumbnailUrl": "https://…",
-  "url":          "URL canonique, ou videoId à défaut"
+  "url":          "canonical link, or the sourceId"
 }</code></pre>
 
 <p>
-  <code>videoId</code> doit rester stable dans le temps : il sert de clé de
-  déduplication, de clé de cache de vignette, et d'identifiant de téléchargement
-  (<code>dl_&lt;videoId&gt;</code> côté Android Auto et Wear).
+  <code>sourceId</code> must stay the same over time: it identifies the track in the library,
+  in the download queue, in Android Auto and on the watch.
 </p>
 
-<h3>Retours par fonction</h3>
+<h3>Return values</h3>
 
-<pre><code>search        {"results": [piste], "offset": int, "total_fetched": int}
-stream_info   piste à plat
-              | {"_type": "playlist", "id", "title", "videoCount", "results": [piste]}
-related       {"results": [piste]}
-playlist_meta {"title": str, "results": [piste]}
-fetch_audio   {"filePath", "videoId", "title", "channelName",
-               "durationMs", "description", "ext"}
-fetch_playlist{"playlistTitle": str, "results": [fetch_audio],
-               "errors": [{"videoId", "error"}]}
-recognize     réponse brute du service : {"matches": [...], "track": {...}}</code></pre>
+<pre><code>search         {"results": [track], "offset": int, "total_fetched": int}
+stream_info    track
+               | {"_type": "playlist", "id", "title", "artist", "trackCount", "results": [track]}
+playlist_meta  {"id", "title", "artist", "trackCount", "results": [track]}
+fetch_audio    {"filePath", "sourceId", "title", "artist", "durationMs", "description",
+                "format"?}
+related        {"results": [track]}
+fetch_playlist {"playlistTitle": str, "results": [fetch_audio result],
+                "errors": [{"sourceId", "error"}]}</code></pre>
+
+<ul>
+  <li>
+    <code>search</code>: honour <code>offset</code>; the app asks for the next page with it.
+  </li>
+  <li>
+    <code>fetch_audio</code>: <code>filePath</code> must be an absolute path to a complete file
+    when the function returns, inside <code>out_dir</code>; the app imports it at once. Write the
+    tags (title, artist, cover) into the file if your format allows it: the app does not.
+    <code>format</code> (<code>"m4a"</code>, <code>"mp3"</code>…) is informational and not read
+    by the app; older templates called it <code>ext</code>, which is ignored just the same.
+    Prefer m4a, mp3, flac or opus.
+  </li>
+</ul>
+
+<h3>Field names and legacy aliases</h3>
 
 <p>
-  <code>fetch_audio</code> : <code>filePath</code> doit exister quand la fonction
-  retourne, l'application l'importe immédiatement. Écrivez les tags dans le
-  fichier si le format le permet — l'application ne le fait pas.
+  Older extensions used other names. The bridge still accepts them, but
+  <strong>set only the new name</strong>:
 </p>
 
-<h2>La reconnaissance musicale</h2>
+<div class="table"><table>
+  <tr><th>Set this</th><th>Legacy names, still accepted</th></tr>
+  <tr><td><code>sourceId</code></td><td><code>videoId</code></td></tr>
+  <tr><td><code>artist</code></td><td><code>channelName</code>, <code>uploader</code></td></tr>
+  <tr><td><code>trackCount</code></td><td><code>videoCount</code></td></tr>
+</table></div>
 
 <p>
-  <strong>L'application ne calcule rien.</strong> Elle capte environ 12 s au micro
-  et vous passe le son brut : <code>pcm</code> est un <code>bytes</code> de PCM
-  mono, entiers 16 bits signés, little-endian, à <code>sample_rate</code> Hz
-  (16000 aujourd'hui — lisez le paramètre plutôt que de l'écrire en dur).
-  Relecture sans copie :
+  The bridge copies the new name onto the legacy one when the legacy one is missing, and never
+  overwrites a value you set. If you set both, the legacy value is the one the app reads.
 </p>
 
-<pre><code>samples = np.frombuffer(pcm, dtype='&lt;i2')</code></pre>
+<h2 id="errors">6. Errors</h2>
+
+<ul>
+  <li>
+    <strong>Return an error, do not raise one.</strong> <code>{"error": "readable message"}</code>:
+    the app shows your text as is, so write it for the user. List functions may add
+    <code>"results": []</code>.
+  </li>
+  <li>
+    <strong>An exception never crashes the app.</strong> The bridge catches everything (including
+    <code>SystemExit</code>) and answers
+    <code>{"error": "extension_error", "message": "ValueError: …"}</code>: the type and message
+    only, never a traceback. Same at import time: a <code>SyntaxError</code> shows on the
+    extension's row and the extension is not loaded.
+  </li>
+  <li>
+    Return a JSON string, a dict or a list; the bridge serialises the latter. Strict JSON only:
+    <code>NaN</code> and infinity are refused.
+  </li>
+</ul>
+
+<p>Codes the bridge itself may return:</p>
+
+<div class="table"><table>
+  <tr><th>Code</th><th>When</th></tr>
+  <tr><td><code>extension_error</code></td><td>Your code raised, at import or during a call. <code>message</code> = <code>"Type: message"</code>.</td></tr>
+  <tr><td><code>unsupported</code></td><td>The function is not defined (no <code>recognize</code>, no <code>pages</code>…).</td></tr>
+  <tr><td><code>no_plugin</code></td><td>No search source, or the named extension is not loaded.</td></tr>
+</table></div>
+
+<h2 id="capabilities">7. Capabilities are detected, not declared</h2>
 
 <p>
-  Empreinte, format binaire, service interrogé : tout vous appartient. C'est
-  volontaire — l'application ne doit rien présumer de votre méthode, pour qu'en
-  changer ne demande pas une mise à jour de l'application. Une mise à jour
-  d'application passe par la revue du store ; un plugin ne passe par rien.
+  The bridge checks <code>callable(getattr(module, name, None))</code>. Define
+  <code>search</code> and the extension is a source; define <code>recognize</code> and the
+  microphone buttons can use it; define <code>pages</code> and “Open its page ›” appears on its
+  row. Remove the function and the capability is gone. A <code>capabilities</code> array in
+  <code>manifest.json</code> is purely documentary: nothing switches on by writing it.
+</p>
+
+<p>
+  Without a recognition extension, the microphone buttons stay visible and explain what is
+  missing. That check runs before the consent dialog and before the microphone permission
+  prompt: nobody records twelve seconds for nothing.
+</p>
+
+<h2 id="recognition">8. Music recognition</h2>
+
+<p>
+  <strong>The app computes nothing.</strong> It records about 12 s from the microphone and calls
+  <code>recognize(pcm, sample_rate)</code>:
+</p>
+
+<ul>
+  <li><code>pcm</code>: <code>bytes</code> of raw PCM, mono, signed 16-bit little-endian, no header;</li>
+  <li><code>sample_rate</code>: samples per second, 16000 today. Read it, do not hard-code it.</li>
+</ul>
+
+<pre><code>import numpy as np
+samples = np.frombuffer(pcm, dtype="&lt;i2")</code></pre>
+
+<p>
+  Fingerprint, format, service: everything after that is yours, so changing method or provider
+  never needs an app update. Return <strong>only the result</strong>:
+</p>
+
+<pre><code>{"title": "…", "artist": "…", "artworkUrl": "https://…"}   # artworkUrl optional
+{"match": null}                                            # nothing recognised
+{"error": "readable message"}                              # failure</code></pre>
+
+<p>
+  The app shows the title and artist, and its button runs a search for them in the Search tab;
+  it downloads nothing by itself.
 </p>
 
 <div class="note">
   <p>
-    <strong>NumPy est disponible.</strong> Il est embarqué dans l'APK et
-    importable depuis un plugin — contrairement à toute dépendance native que vous
-    zipperiez vous-même, qu'Android refuse de charger depuis un répertoire
-    inscriptible. Servez-vous en : 1500 FFT de 2048 points prennent environ 0,7 s
-    avec, et des dizaines de secondes sans.
+    <strong>NumPy is available.</strong> It ships inside the app and imports normally — unlike
+    any native dependency you would zip yourself. 1500 FFTs of 2048 points take about 0.7 s
+    with it, tens of seconds without.
   </p>
 </div>
 
 <div class="note">
   <p>
-    <strong>Vous recevez du son capté au micro.</strong> Il peut contenir autre
-    chose que de la musique : une conversation, une télévision, du silence. Ne
-    l'écrivez pas sur le disque, ne le transmettez pas tel quel, et n'envoyez au
-    réseau que ce que la reconnaissance exige. C'est la pièce de quelqu'un.
+    <strong>You receive microphone audio.</strong> It may hold something other than music: a
+    conversation, a television, silence. Do not write it to disk, do not forward it as is, and
+    send over the network only what recognition requires. It is somebody's room. Return
+    <code>{"match": null}</code> rather than a guess.
   </p>
 </div>
 
-<p>
-  L'application lit <code>track.title</code>, <code>track.subtitle</code> et
-  <code>track.images.coverarthq</code> (repli <code>coverart</code>), et n'accepte
-  le résultat que si <code>matches</code> est non vide.
-</p>
-
-<h2>manifest.json</h2>
-
-<pre><code>{
-  "plugin_version": "0.1.0",
-  "capabilities": ["source"],
-  "dependencies": {},
-  "built_at": "1970-01-01T00:00:00+00:00"
-}</code></pre>
-
-<div class="note">
-  <p>
-    <strong><code>plugin_version</code> est l'identité du plugin</strong>, pas une
-    décoration : l'application en dérive le dossier d'installation
-    (<code>plugins/plugin_&lt;version&gt;</code>). Conséquence directe — si vous
-    modifiez le code sans changer la version, le dossier existe déjà et
-    l'application <strong>ne ré-extrait pas</strong> votre zip. Incrémentez à
-    chaque build.
-  </p>
-</div>
+<h2 id="pages">9. Pages and actions</h2>
 
 <p>
-  Les autres clés ne sont lues par personne aujourd'hui. <code>capabilities</code>
-  sert la lecture humaine et l'écran Plugins à venir ; gardez-le juste par
-  honnêteté.
+  <code>pages()</code> describes screens that the app draws with its own native components:
+  never HTML, links or prices. It returns a list of pages:
 </p>
 
-<h2>Erreurs fréquentes</h2>
+<pre><code>def pages():
+    return [{
+        "id": "settings",
+        "titre": {"en": "My extension", "fr": "Mon extension"},
+        "elements": [
+            {"type": "texte", "cle": "server", "libelle": "Server", "aide": "https://…"},
+            {"type": "interrupteur", "cle": "hq", "libelle": "High quality", "defaut": True},
+            {"type": "bouton", "libelle": "Test the connection", "action": "test_connection"},
+        ],
+    }]
 
-<table>
-  <tr><th>Symptôme</th><th>Cause</th></tr>
-  <tr><td>Le plugin s'importe mais rien ne change</td><td>Version non incrémentée — l'ancien dossier est réutilisé</td></tr>
-  <tr><td>Le bouton micro dit « pas de reconnaissance »</td><td>Pas de <code>def recognize</code> dans le module actif</td></tr>
-  <tr><td>Crash à la recherche</td><td>Une fonction a levé, ou a retourné un dict au lieu d'une chaîne</td></tr>
-  <tr><td>Résultats vides sans erreur</td><td><code>offset</code> ignoré : la page 2 renvoie la page 1, l'application la déduplique</td></tr>
-  <tr><td>Le morceau se télécharge mais n'apparaît pas</td><td><code>filePath</code> pointe sur un fichier absent ou encore en cours d'écriture</td></tr>
-</table>
+def test_connection(reglages):
+    ok = bool(reglages.get("server"))
+    return {"message": "Connected." if ok else "No server set.", "rafraichir": False}</code></pre>
 
-<p>Logs utiles :</p>
+<h3>The eight element types</h3>
 
-<pre><code>adb logcat -s PluginManager:I python.stdout:I python.stderr:W MusicRecognitionManager:W</code></pre>
+<div class="table"><table>
+  <tr><th>Type</th><th>Fields</th><th>What the user sees</th></tr>
+  <tr><td><code>texte</code></td><td><code>cle</code>, <code>libelle</code>, <code>aide</code>?, <code>defaut</code>?</td><td>A text field, saved under <code>cle</code>.</td></tr>
+  <tr><td><code>secret</code></td><td><code>cle</code>, <code>libelle</code>, <code>aide</code>?</td><td>A masked field (password, token). Never logged, exported or backed up by the app.</td></tr>
+  <tr><td><code>choix</code></td><td><code>cle</code>, <code>libelle</code>, <code>valeurs</code>, <code>defaut</code>?</td><td>A drop-down. <code>valeurs</code>: strings, or <code>{"valeur", "libelle"}</code>. Values keep their type (number, boolean, text).</td></tr>
+  <tr><td><code>interrupteur</code></td><td><code>cle</code>, <code>libelle</code>, <code>aide</code>?, <code>defaut</code>?</td><td>A switch.</td></tr>
+  <tr><td><code>bouton</code></td><td><code>libelle</code>, <code>action</code>, <code>arg</code>?</td><td>A button calling one of your functions.</td></tr>
+  <tr><td><code>message</code></td><td><code>texte</code></td><td>A paragraph.</td></tr>
+  <tr><td><code>liste</code></td><td><code>elements</code>: <code>{titre, sous_titre?, vignette?, bouton?}</code></td><td>A list of items, each with an optional thumbnail and button.</td></tr>
+  <tr><td><code>page</code></td><td><code>cible</code>, <code>libelle</code></td><td>A link to another page (<code>id</code>) of the same extension.</td></tr>
+</table></div>
+
+<ul>
+  <li>
+    <strong><code>defaut</code></strong> (on <code>texte</code>, <code>choix</code>,
+    <code>interrupteur</code>): what the field <em>shows</em> until the user saves something.
+    It is not saved, so <code>reglage(cle, defaut)</code> still returns its own
+    <code>defaut</code> argument: use the same default in both places, or a switch your code
+    treats as on will be shown off.
+  </li>
+  <li>
+    <strong>Text</strong>: a string, or <code>{"en": …, "fr": …}</code>. The app picks its exact
+    language (<code>pt-BR</code> → <code>pt_br</code>), else a variant of it, else English, else
+    the first entry.
+  </li>
+  <li>
+    <strong><code>vignette</code></strong>: a PNG or JPEG in base64 (<code>data:</code> prefix
+    optional), or a path relative to your folder (refused if it leads outside).
+    <strong>Never a URL</strong>: the app fetches nothing.
+  </li>
+  <li>An unknown type shows as a grey “not supported” line; it never crashes the page.</li>
+  <li>
+    Values are saved by the app in <code>data/reglages.json</code> at every change; read them with
+    <code>reglage(cle, defaut)</code>. If that file is unreadable, the app writes nothing over it
+    and says so.
+  </li>
+</ul>
+
+<h3>Actions</h3>
+
+<ul>
+  <li>
+    A button calls the top-level function named by its <code>action</code>, as
+    <code>fn(reglages)</code>, or <code>fn(reglages, arg)</code> when the button has an
+    <code>arg</code>. <code>reglages</code> is the dict of saved values.
+  </li>
+  <li>
+    <strong>Allow-list</strong>: <code>pages()</code> is read again at every call, and only the
+    action of a button the app actually displays may run. Never a name starting with
+    <code>_</code>, nor a reserved name: <code>reglage</code>, <code>data_dir</code>,
+    <code>extension_id</code>, <code>search</code>, <code>stream_info</code>,
+    <code>fetch_audio</code>, <code>related</code>, <code>playlist_meta</code>,
+    <code>fetch_playlist</code>, <code>recognize</code>, <code>pages</code>. A button whose action
+    would be refused is shown as “not supported”.
+  </li>
+  <li>
+    Return <code>{"message": str | {lang: str}, "rafraichir": bool, "page": id}</code>, every key
+    optional, or <code>None</code>. <code>rafraichir</code> re-reads <code>pages()</code> first;
+    <code>page</code> then opens that page.
+  </li>
+  <li>
+    <strong>Time limits</strong>: reading the pages, 5 s (then a Retry button). An action, 15 s:
+    after that the app says the extension did not respond and the action may still be running;
+    the buttons stay disabled until the real return. One action at a time per extension.
+  </li>
+  <li>
+    <strong>Limits</strong>: the first 50 pages, 200 elements per page, 200 list items per page
+    (with an “N items not shown” line beyond).
+  </li>
+  <li>
+    No component opens a URL, shows a price or enables an extension. That is deliberate.
+  </li>
+</ul>
+
+<p>Error codes of pages and actions (the app translates them):</p>
+
+<div class="table"><table>
+  <tr><th>Code</th><th>Meaning</th></tr>
+  <tr><td><code>action_refusee</code></td><td>The action is not on a displayed button, or its name is reserved.</td></tr>
+  <tr><td><code>action_introuvable</code></td><td>Declared on a button, but no such function.</td></tr>
+  <tr><td><code>pages_invalides</code></td><td><code>pages()</code> did not return a list, or something JSON cannot write.</td></tr>
+  <tr><td><code>retour_invalide</code></td><td>The action returned something other than an object.</td></tr>
+  <tr><td><code>valeur_invalide</code></td><td>NaN or infinity somewhere in the answer.</td></tr>
+  <tr><td><code>unsupported</code></td><td>No <code>pages()</code>.</td></tr>
+  <tr><td><code>extension_error</code></td><td>Your code raised; the message is shown, shortened to 200 characters.</td></tr>
+</table></div>
+
+<h3>Dropping another extension</h3>
+
+<p>
+  An extension may act as a catalogue and drop another one (or any file) into
+  <code>files/plugins/</code> or its own <code>data_dir()</code>. Copy with
+  <code>shutil.copyfile</code>, file by file and without metadata: <code>copytree</code>,
+  <code>copy2</code> and <code>copystat</code> copy the SELinux extended attributes and Android
+  refuses (<code>relabelfrom</code>). A dropped extension is <strong>Pending</strong>: it never
+  loads until the user reviews and confirms it.
+</p>
+
+<h2 id="glossary">10. Glossary of contract keys</h2>
+
+<p>The page contract keeps its original French keys. Write them exactly as below.</p>
+
+<div class="table"><table>
+  <tr><th>Key</th><th>Meaning</th></tr>
+  <tr><td><code>nom</code></td><td>name (manifest; <code>name</code> also accepted)</td></tr>
+  <tr><td><code>titre</code></td><td>title (of a page, of a list item)</td></tr>
+  <tr><td><code>sous_titre</code></td><td>subtitle</td></tr>
+  <tr><td><code>elements</code></td><td>elements (of a page, of a list)</td></tr>
+  <tr><td><code>cle</code></td><td>key under which a value is saved</td></tr>
+  <tr><td><code>libelle</code></td><td>label</td></tr>
+  <tr><td><code>aide</code></td><td>help text under a field</td></tr>
+  <tr><td><code>defaut</code></td><td>default value</td></tr>
+  <tr><td><code>valeurs</code> / <code>valeur</code></td><td>values of a <code>choix</code> / one value</td></tr>
+  <tr><td><code>texte</code></td><td>text (a field type, and the text of a <code>message</code>)</td></tr>
+  <tr><td><code>interrupteur</code>, <code>choix</code>, <code>bouton</code>, <code>liste</code></td><td>switch, drop-down, button, list</td></tr>
+  <tr><td><code>vignette</code></td><td>thumbnail</td></tr>
+  <tr><td><code>cible</code></td><td>target page id</td></tr>
+  <tr><td><code>rafraichir</code></td><td>refresh (re-read the pages)</td></tr>
+  <tr><td><code>reglage</code> / <code>reglages</code></td><td>one setting / all saved settings</td></tr>
+  <tr><td><code>data_dir</code></td><td>your data folder</td></tr>
+</table></div>
+
+<h2 id="mistakes">11. Common mistakes</h2>
+
+<div class="table"><table>
+  <tr><th>Symptom</th><th>Cause</th></tr>
+  <tr><td>The update installs as a second extension</td><td>No <code>id</code> in <code>manifest.json</code>, and the zip was renamed</td></tr>
+  <tr><td>“Changed since you confirmed it” after a restart</td><td>The extension wrote into its code folder instead of <code>data_dir()</code></td></tr>
+  <tr><td>Loading error “missing function: …”</td><td><code>search</code> is defined but not <code>stream_info</code>, <code>fetch_audio</code> or <code>playlist_meta</code></td></tr>
+  <tr><td>Two extensions break each other</td><td>Same internal module name (<code>utils.py</code>…) in both</td></tr>
+  <tr><td>Import works, loading fails on <code>.so</code></td><td>A native dependency in the zip: not possible, use pure Python or what the app bundles</td></tr>
+  <tr><td>The microphone button says no recognition</td><td>No <code>def recognize</code> in the recognition extension, or it is disabled</td></tr>
+  <tr><td>Recognition never finds anything</td><td><code>recognize</code> returns another shape than <code>{"title", "artist"}</code></td></tr>
+  <tr><td>Page 2 of a search repeats page 1</td><td><code>offset</code> ignored</td></tr>
+  <tr><td>The download “works” but no track appears</td><td><code>filePath</code> points to a missing or half-written file</td></tr>
+  <tr><td>A download fails with an unknown track</td><td><code>fetch_audio</code> only accepts URLs, not the <code>sourceId</code> it is given</td></tr>
+  <tr><td>A switch shows off although the code treats it as on</td><td><code>defaut</code> missing on the page element</td></tr>
+  <tr><td>A button shows as “not supported”</td><td>Its action starts with <code>_</code> or is a reserved name</td></tr>
+</table></div>
+
+<p>Useful logs:</p>
+
+<pre><code>adb logcat -s PluginManager:I MediaRepository:W MusicRecognition:W python.stdout:I python.stderr:W</code></pre>
 
 <footer>
-  Un plugin est du code que vous distribuez et dont vous répondez. L'application
-  ne le vérifie pas, ne l'approuve pas, et le dit à qui l'installe.
+  An extension is code you distribute and answer for. The app does not review or approve it,
+  and tells the person installing it so.
 </footer>
 
 </body>

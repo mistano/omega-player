@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="{{=lang}}" dir="{{dir}}" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{meta_title}}</title>
+<meta name="description" content="{{meta_desc}}">
+<meta name="theme-color" content="#05090B">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="canonical" href="{{=url}}">
+{{=hreflang}}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Omega Player">
+<meta property="og:title" content="{{meta_title}}">
+<meta property="og:description" content="{{meta_desc}}">
+<meta property="og:url" content="{{=url}}">
+<meta property="og:image" content="{{=og_image}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="{{og_locale}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{meta_title}}">
+<meta name="twitter:description" content="{{meta_desc}}">
+<meta name="twitter:image" content="{{=og_image}}">
+<link rel="icon" href="{{=base}}favicon.ico" sizes="any">
+<link rel="icon" href="{{=base}}img/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="{{=base}}img/apple-touch-icon.png">
+<link rel="preload" href="{{=base}}fonts/archivo-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{=base}}assets/css/site.css">
+<script>document.documentElement.className=document.documentElement.className.replace('no-js','js');{{=detect}}</script>
+</head>
+<body>
+<a class="skip" href="#contenu">{{skip}}</a>
+
+<header class="top" data-top>
+  <a class="top__brand" href="{{=home}}">
+    <img src="{{=base}}img/icon-96.webp" width="36" height="36" alt="">
+    <span>Omega Player</span>
+  </a>
+  <nav class="top__nav" aria-label="Omega Player">
+    <a href="#fonctions">{{nav_features}}</a>
+    <a href="#video">{{nav_video}}</a>
+    <a href="#vie-privee">{{nav_privacy}}</a>
+    <a href="#nouveautes">{{nav_news}}</a>
+    <a href="{{=base}}sdk/">{{nav_sdk}}</a>
+  </nav>
+  <details class="lang" data-lang-menu>
+    <summary><span class="lang__icon" aria-hidden="true">文A</span><span class="sr">{{lang_label}}: </span><span>{{name}}</span></summary>
+    <ul class="lang__list">
+{{=languages}}
+    </ul>
+  </details>
+  <a class="btn btn--small" href="{{=play}}" rel="noopener">{{cta_short}}<span class="btn__arrow" aria-hidden="true"></span></a>
+</header>
+
+<main id="contenu">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__aura" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="hero__spectrum" aria-hidden="true">{{=bars}}</div>
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <p class="kicker" data-intro>{{hero_kicker}}</p>
+        <h1 id="hero-title" class="hero__title" data-split>{{hero_title}}</h1>
+        <p class="hero__lead" data-intro>{{hero_lead}}</p>
+        <div class="hero__cta" data-intro>
+          <a class="badge-play" href="{{=play}}" rel="noopener"><img src="{{=base}}img/badges/{{=lang}}.png" alt="{{cta}}" width="646" height="250" loading="lazy" decoding="async"></a>
+          <p class="hero__note">{{cta_note}}</p>
+        </div>
+        <ul class="chips" data-intro>
+          <li>{{chip_account}}</li><li>{{chip_ads}}</li><li>{{chip_sub}}</li><li>{{chip_offline}}</li>
+        </ul>
+      </div>
+      <div class="hero__device"><div class="hero__recul">
+        <div class="scene scene--hero"><div class="scene__rig" data-rig><div class="scene__pose">
+          {{=hero_scene}}
+        </div></div></div>
+      </div></div>
+    </div>
+    <a class="hero__scroll" href="#video"><span>{{scroll_hint}}</span><i aria-hidden="true"></i></a>
+  </section>
+
+  <section class="video" id="video" aria-labelledby="video-title">
+    <p class="kicker" data-reveal>{{video_kicker}}</p>
+    <h2 id="video-title" class="h2" data-reveal>{{video_title}}</h2>
+    <figure class="film">
+      <div class="film__cadre">
+        <div class="film__ecran">{{=film}}</div>
+      </div>
+      <figcaption><p>{{video_note}}</p>{{=video_english}}</figcaption>
+    </figure>
+    <div class="bobines__tete">
+      <h3 class="h3" data-reveal>{{reel_title}}</h3>
+      <p data-reveal>{{reel_lead}}</p>
+    </div>
+    <ul class="bobines">
+{{=bobines}}
+    </ul>
+  </section>
+
+  <section class="manifesto" id="manifeste" data-words-section>
+    <p class="manifesto__text" data-words>{{manifesto}}</p>
+  </section>
+
+  <div class="ruban" aria-hidden="true"><div class="ruban__piste">{{=ruban}}</div></div>
+
+  <section class="story" id="fonctions" aria-labelledby="story-title">
+    <div class="story__head">
+      <p class="kicker" data-reveal>{{story_kicker}}</p>
+      <h2 id="story-title" class="sr">{{nav_features}}</h2>
+    </div>
+    <div class="story__body">
+      <div class="story__steps">
+        <article class="step" data-step="0" data-bill="crossfade volume">
+          <span class="step__num" aria-hidden="true">01</span>
+          <h3 class="step__title">{{s1_title}}</h3>
+          <p>{{s1_body}}</p>
+          {{=shot0}}
+        </article>
+        <article class="step" data-step="1" data-bill="eq spatial">
+          <span class="step__num" aria-hidden="true">02</span>
+          <h3 class="step__title">{{s2_title}}</h3>
+          <p>{{s2_body}}</p>
+          {{=shot1}}
+        </article>
+        <article class="step" data-step="2" data-bill="queue">
+          <span class="step__num" aria-hidden="true">03</span>
+          <h3 class="step__title">{{s3_title}}</h3>
+          <p>{{s3_body}}</p>
+          {{=shot2}}
+        </article>
+        <article class="step" data-step="3" data-bill="playlists">
+          <span class="step__num" aria-hidden="true">04</span>
+          <h3 class="step__title">{{s4_title}}</h3>
+          <p>{{s4_body}}</p>
+          {{=shot3}}
+        </article>
+        <article class="step" data-step="4" data-bill="moods">
+          <span class="step__num" aria-hidden="true">05</span>
+          <h3 class="step__title">{{s5_title}}</h3>
+          <p>{{s5_body}}</p>
+          {{=shot4}}
+        </article>
+      </div>
+      <div class="story__stage" aria-hidden="true">
+        <div class="story__sticky" data-plateau data-etape="0">
+          {{=stage}}
+          <ol class="story__dots"><li class="is-on"></li><li></li><li></li><li></li><li></li></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="where" aria-labelledby="where-title">
+    <h2 id="where-title" class="h2" data-reveal>{{where_title}}</h2>
+    <div class="where__grid">
+      <article class="card card--auto" data-reveal data-bill="auto">
+        <svg class="card__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30l3.5-10.5A4 4 0 0 1 17.3 17h13.4a4 4 0 0 1 3.8 2.5L38 30v8a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-2H16v2a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="16" cy="30" r="2.4" fill="currentColor"/><circle cx="32" cy="30" r="2.4" fill="currentColor"/><path d="M14 26h20" stroke="currentColor" stroke-width="2.4"/></svg>
+        <h3>Android Auto</h3>
+        <p>{{w_auto}}</p>
+      </article>
+      <article class="card card--wear" data-reveal data-bill="wear">
+        <div class="card__watches">{{=montres}}</div>
+        <h3>Wear OS</h3>
+        <p>{{w_wear}}</p>
+      </article>
+      <article class="card card--tablet" data-reveal>
+        {{=tablette}}
+        <h3>{{w_screens_title}}</h3>
+        <p>{{w_screens}}</p>
+      </article>
+      <article class="card card--sleep" data-reveal>
+        <svg class="card__icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M30 8a16 16 0 1 0 10 28A14 14 0 0 1 30 8z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+        <h3>{{w_sleep_title}}</h3>
+        <p>{{w_sleep}}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="privacy" id="vie-privee" aria-labelledby="privacy-title" data-bill="privacy">
+    <h2 id="privacy-title" class="h2" data-reveal>{{privacy_title}}</h2>
+    <ul class="zeros">
+      <li class="zero" data-reveal><span class="zero__digit" aria-hidden="true" data-roll><span>9<br>7<br>4<br>2<br>1<br>0</span></span><span class="sr">0</span><span class="zero__label">{{z_accounts}}</span></li>
+      <li class="zero" data-reveal><span class="zero__digit" aria-hidden="true" data-roll><span>8<br>6<br>5<br>3<br>1<br>0</span></span><span class="sr">0</span><span class="zero__label">{{z_ads}}</span></li>
+      <li class="zero" data-reveal><span class="zero__digit" aria-hidden="true" data-roll><span>9<br>8<br>5<br>3<br>2<br>0</span></span><span class="sr">0</span><span class="zero__label">{{z_trackers}}</span></li>
+      <li class="zero" data-reveal><span class="zero__digit" aria-hidden="true" data-roll><span>7<br>6<br>4<br>2<br>1<br>0</span></span><span class="sr">0</span><span class="zero__label">{{z_servers}}</span></li>
+    </ul>
+    <div class="privacy__text">
+      <p data-reveal>{{p_tracking}}</p>
+      <p data-reveal>{{p_server}}</p>
+    </div>
+  </section>
+
+  <section class="source" aria-labelledby="source-title">
+    <div class="source__mark" aria-hidden="true"><span>{ }</span></div>
+    <div class="source__copy">
+      <h2 id="source-title" class="h2" data-reveal>{{source_title}}</h2>
+      <p data-reveal>{{source_p1}}</p>
+      <p data-reveal>{{source_p2}}</p>
+      <p data-reveal><a class="link" href="{{=base}}sdk/">{{source_link}}<span class="btn__arrow" aria-hidden="true"></span></a></p>
+    </div>
+  </section>
+
+  <section class="news" id="nouveautes" aria-labelledby="news-title">
+    <h2 id="news-title" class="h2" data-reveal>{{news_title}}</h2>
+{{=news}}
+  </section>
+
+  <section class="price" aria-labelledby="price-title">
+    <div class="price__copy">
+      <h2 id="price-title" class="h2" data-reveal>{{price_title}}</h2>
+      <p data-reveal>{{price_p1}}</p>
+      <p data-reveal>{{price_p2}}</p>
+    </div>
+    <div class="receipt" data-reveal aria-hidden="true">
+      <p class="receipt__head">Omega Player · {{bill_title}}</p>
+      <ul>
+{{=receipt}}
+      </ul>
+      <p class="receipt__total"><span>{{bill_total}}</span><span>{{zero}}</span></p>
+    </div>
+  </section>
+
+  <section class="final" aria-labelledby="final-title">
+    <div class="final__rings" aria-hidden="true"><i></i><i></i><i></i></div>
+    <img class="final__icon" src="{{=base}}img/icon-192.png" width="96" height="96" alt="{{alt_icon}}" loading="lazy">
+    <h2 id="final-title" class="final__title" data-reveal>{{final_title}}</h2>
+    <p class="final__lead" data-reveal>{{final_lead}}</p>
+    <div data-reveal>
+      <a class="badge-play badge-play--big" href="{{=play}}" rel="noopener"><img src="{{=base}}img/badges/{{=lang}}.png" alt="{{cta}}" width="646" height="250" loading="lazy" decoding="async"></a>
+      <p class="hero__note">{{cta_note}}</p>
+    </div>
+  </section>
+</main>
+
+<aside class="bill" data-bill-panel aria-hidden="true">
+  <div class="bill__ticket">
+    <div class="bill__papier">
+      <ul class="bill__list" data-bill-roll>
+{{=bill}}
+      </ul>
+    </div>
+    <div class="bill__caisse">
+      <p class="bill__head"><span>{{bill_title}}</span><span class="bill__count" data-bill-count>0</span></p>
+      <p class="bill__total"><span>{{bill_total}}</span><span class="bill__zero" data-bill-zero>{{zero}}</span><i class="bill__eclat" data-bill-eclat></i></p>
+      <a class="btn btn--small bill__cta" href="{{=play}}" rel="noopener" tabindex="-1">{{cta_short}}<span class="btn__arrow"></span></a>
+    </div>
+  </div>
+</aside>
+
+<dialog class="salle" data-salle>
+  <button class="salle__fermer" type="button" data-salle-fermer><span aria-hidden="true">×</span><span class="sr">{{video_close}}</span></button>
+  <div class="salle__ecran" data-salle-ecran></div>
+</dialog>
+
+<footer class="foot">
+  <div class="foot__row">
+    <a class="top__brand" href="{{=home}}"><img src="{{=base}}img/icon-96.webp" width="32" height="32" alt="" loading="lazy"><span>Omega Player</span></a>
+    <nav class="foot__links" aria-label="{{footer_made}}">
+      <a href="https://github.com/mistano/omega-player/blob/main/PRIVACY_POLICY.md" rel="noopener">{{footer_privacy}}</a>
+      <a href="{{=base}}sdk/">{{nav_sdk}}</a>
+      <a href="https://github.com/mistano/omega-player" rel="noopener">{{footer_github}}</a>
+      <a href="{{=play}}" rel="noopener">Google Play</a>
+    </nav>
+  </div>
+  <ul class="foot__langs" aria-label="{{lang_label}}">
+{{=languages}}
+  </ul>
+  <p class="foot__small">{{footer_made}} · {{footer_tm}}</p>
+  <p class="foot__small">{{footer_fonts}}</p>
+  <p class="foot__small">{{footer_credits}}</p>
+</footer>
+<script src="{{=base}}assets/js/site.js" defer></script>
+</body>
+</html>

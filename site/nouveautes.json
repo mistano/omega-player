@@ -1,0 +1,87 @@
+{
+  "versions": [
+    {
+      "version": "1.0",
+      "date": "2026-11-20",
+      "points": {
+        "en": [
+          "First release on Google Play.",
+          "Crossfade, levelled volume and a queue that follows tempo and tone.",
+          "10-band equalizer and 3D spatial audio for headphones.",
+          "Android Auto, Wear OS watch app, tablet layout and home screen widget.",
+          "All 27 visual moods included, free."
+        ],
+        "fr": [
+          "Première version sur Google Play.",
+          "Fondu enchaîné, volume harmonisé et une file qui suit le tempo et la couleur sonore.",
+          "Égaliseur 10 bandes et audio spatial 3D au casque.",
+          "Android Auto, application de montre Wear OS, interface tablette et widget d'écran d'accueil.",
+          "Les 27 ambiances visuelles incluses, gratuitement."
+        ],
+        "de": [
+          "Erste Version bei Google Play.",
+          "Überblendung, angeglichene Lautstärke und eine Warteschlange, die Tempo und Klangfarbe folgt.",
+          "10-Band-Equalizer und 3D-Raumklang über Kopfhörer.",
+          "Android Auto, Wear-OS-App für die Uhr, Tablet-Layout und Startbildschirm-Widget.",
+          "Alle 27 visuellen Stimmungen inklusive, kostenlos."
+        ],
+        "es": [
+          "Primera versión en Google Play.",
+          "Fundido encadenado, volumen igualado y una cola que sigue el tempo y el color sonoro.",
+          "Ecualizador de 10 bandas y audio espacial 3D con auriculares.",
+          "Android Auto, app de reloj Wear OS, interfaz para tablets y widget de inicio.",
+          "Los 27 ambientes visuales incluidos, gratis."
+        ],
+        "it": [
+          "Prima versione su Google Play.",
+          "Dissolvenza incrociata, volume uniformato e una coda che segue il tempo e il colore sonoro.",
+          "Equalizzatore a 10 bande e audio spaziale 3D in cuffia.",
+          "Android Auto, app per orologio Wear OS, interfaccia tablet e widget per la schermata Home.",
+          "Tutte le 27 atmosfere visive incluse, gratis."
+        ],
+        "pt": [
+          "Primeira versão no Google Play.",
+          "Transição encadeada, volume uniformizado e uma fila que segue o tempo e a cor sonora.",
+          "Equalizador de 10 bandas e áudio espacial 3D com auscultadores.",
+          "Android Auto, app de relógio Wear OS, interface para tablets e widget do ecrã principal.",
+          "Os 27 ambientes visuais incluídos, grátis."
+        ],
+        "ru": [
+          "Первая версия в Google Play.",
+          "Перекрёстное затухание, ровная громкость и очередь, которая следует темпу и тембру.",
+          "10-полосный эквалайзер и объёмное 3D-звучание в наушниках.",
+          "Android Auto, приложение для часов Wear OS, раскладка для планшета и виджет.",
+          "Все 27 визуальных настроений включены бесплатно."
+        ],
+        "ar": [
+          "الإصدار الأول على Google Play.",
+          "تلاشٍ متداخل، صوت موحّد المستوى، وقائمة تتبع الإيقاع واللون الصوتي.",
+          "معادل صوتي بعشرة نطاقات وصوت مجسم ثلاثي الأبعاد بالسماعات.",
+          "Android Auto، تطبيق ساعة Wear OS، واجهة للأجهزة اللوحية وأداة لشاشة البداية.",
+          "الأجواء البصرية السبعة والعشرون مضمّنة مجاناً."
+        ],
+        "ja": [
+          "Google Playでの最初のリリース。",
+          "クロスフェード、そろった音量、テンポと音色に沿ったキュー。",
+          "10バンドイコライザーとヘッドホン向け3D立体音響。",
+          "Android Auto、Wear OSウォッチアプリ、タブレット用レイアウト、ホーム画面ウィジェット。",
+          "27種類のビジュアルをすべて無料で収録。"
+        ],
+        "ko": [
+          "Google Play 첫 출시.",
+          "크로스페이드, 고른 음량, 템포와 음색을 따르는 대기열.",
+          "10밴드 이퀄라이저와 헤드폰용 3D 공간 음향.",
+          "Android Auto, Wear OS 워치 앱, 태블릿 레이아웃, 홈 화면 위젯.",
+          "27가지 분위기 모두 무료로 포함."
+        ],
+        "zh": [
+          "首次登陆 Google Play。",
+          "交叉淡入淡出、统一音量，以及跟随节奏与音色的播放队列。",
+          "10 段均衡器与耳机 3D 空间音频。",
+          "Android Auto、Wear OS 手表应用、平板布局和主屏小组件。",
+          "全部 27 种视觉氛围免费包含。"
+        ]
+      }
+    }
+  ]
+}

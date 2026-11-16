@@ -1,0 +1,194 @@
+{
+ "fiche-fr": {
+  "source": "V0-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 23.2,
+  "poids_mo": 2.04
+ },
+ "fiche-en": {
+  "source": "V0-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 23.2,
+  "poids_mo": 2.06
+ },
+ "addition-fr": {
+  "source": "V1-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 19.6,
+  "poids_mo": 2.06
+ },
+ "addition-en": {
+  "source": "V1-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 19.6,
+  "poids_mo": 2.08
+ },
+ "ambiances-fr": {
+  "source": "V3-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 17.8,
+  "poids_mo": 2.0
+ },
+ "ambiances-en": {
+  "source": "V3-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 17.8,
+  "poids_mo": 2.06
+ },
+ "film-fr": {
+  "source": "V11-fr-final-leger.mp4",
+  "format": "16:9",
+  "duree_s": 30.2,
+  "poids_mo": 3.33
+ },
+ "film-en": {
+  "source": "V11-en-final-leger.mp4",
+  "format": "16:9",
+  "duree_s": 30.2,
+  "poids_mo": 3.32
+ },
+ "teleachat-fr": {
+  "source": "V9-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 28.5,
+  "poids_mo": 6.75
+ },
+ "teleachat-en": {
+  "source": "V9-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 28.5,
+  "poids_mo": 6.69
+ },
+ "documentaire-fr": {
+  "source": "V12-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 33.8,
+  "poids_mo": 3.27
+ },
+ "documentaire-en": {
+  "source": "V12-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 33.8,
+  "poids_mo": 3.24
+ },
+ "fou-fr": {
+  "source": "V5-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 24.9,
+  "poids_mo": 3.61
+ },
+ "fou-en": {
+  "source": "V5-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 24.9,
+  "poids_mo": 3.62
+ },
+ "film-9x16-fr": {
+  "source": "V10-fr-final-leger.mp4",
+  "format": "9:16",
+  "duree_s": 30.2,
+  "poids_mo": 3.46
+ },
+ "film-9x16-en": {
+  "source": "V10-en-final-leger.mp4",
+  "format": "9:16",
+  "duree_s": 30.2,
+  "poids_mo": 3.45
+ },
+ "teleachat-9x16-fr": {
+  "source": "V8-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 28.5,
+  "poids_mo": 5.22
+ },
+ "teleachat-9x16-en": {
+  "source": "V8-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 28.5,
+  "poids_mo": 5.12
+ },
+ "documentaire-16x9-fr": {
+  "source": "V13-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 33.8,
+  "poids_mo": 3.19
+ },
+ "documentaire-16x9-en": {
+  "source": "V13-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 33.8,
+  "poids_mo": 3.15
+ },
+ "ytp-16x9-fr": {
+  "source": "V15-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 28.5,
+  "poids_mo": 5.91
+ },
+ "ytp-16x9-en": {
+  "source": "V15-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 28.5,
+  "poids_mo": 5.82
+ },
+ "ytp-9x16-fr": {
+  "source": "V14-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 28.5,
+  "poids_mo": 6.03
+ },
+ "ytp-9x16-en": {
+  "source": "V14-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 28.5,
+  "poids_mo": 6.06
+ },
+ "fou-9x16-fr": {
+  "source": "V4-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 24.9,
+  "poids_mo": 4.06
+ },
+ "fou-9x16-en": {
+  "source": "V4-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 24.9,
+  "poids_mo": 4.07
+ },
+ "blanc-fr": {
+  "source": "V2-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 16.0,
+  "poids_mo": 1.21
+ },
+ "blanc-en": {
+  "source": "V2-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 16.0,
+  "poids_mo": 1.22
+ },
+ "diaporama-9x16-fr": {
+  "source": "regeneration-20261116-110917/V16-fr-final-leger.mp4",
+  "format": "9:16",
+  "duree_s": 30.2,
+  "poids_mo": 3.13
+ },
+ "diaporama-9x16-en": {
+  "source": "regeneration-20261116-110917/V16-en-final-leger.mp4",
+  "format": "9:16",
+  "duree_s": 30.2,
+  "poids_mo": 3.12
+ },
+ "diaporama-16x9-fr": {
+  "source": "regeneration-20261116-110917/V17-fr-final-leger.mp4",
+  "format": "16:9",
+  "duree_s": 30.2,
+  "poids_mo": 3.44
+ },
+ "diaporama-16x9-en": {
+  "source": "regeneration-20261116-110917/V17-en-final-leger.mp4",
+  "format": "16:9",
+  "duree_s": 30.2,
+  "poids_mo": 3.37
+ }
+}
