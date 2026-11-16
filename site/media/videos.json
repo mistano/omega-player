@@ -2,13 +2,13 @@
  "fiche-fr": {
   "source": "V0-fr-musique.mp4",
   "format": "16:9",
-  "duree_s": 23.2,
+  "duree_s": 23.1,
   "poids_mo": 2.04
  },
  "fiche-en": {
   "source": "V0-en-musique.mp4",
   "format": "16:9",
-  "duree_s": 23.2,
+  "duree_s": 23.1,
   "poids_mo": 2.06
  },
  "addition-fr": {
@@ -21,7 +21,7 @@
   "source": "V1-en-musique.mp4",
   "format": "9:16",
   "duree_s": 19.6,
-  "poids_mo": 2.08
+  "poids_mo": 2.09
  },
  "ambiances-fr": {
   "source": "V3-fr-musique.mp4",
@@ -39,7 +39,7 @@
   "source": "V11-fr-final-leger.mp4",
   "format": "16:9",
   "duree_s": 30.2,
-  "poids_mo": 3.33
+  "poids_mo": 3.34
  },
  "film-en": {
   "source": "V11-en-final-leger.mp4",
@@ -50,26 +50,26 @@
  "teleachat-fr": {
   "source": "V9-fr-musique.mp4",
   "format": "16:9",
-  "duree_s": 28.5,
-  "poids_mo": 6.75
+  "duree_s": 28.4,
+  "poids_mo": 6.72
  },
  "teleachat-en": {
   "source": "V9-en-musique.mp4",
   "format": "16:9",
-  "duree_s": 28.5,
-  "poids_mo": 6.69
+  "duree_s": 28.4,
+  "poids_mo": 6.68
  },
  "documentaire-fr": {
   "source": "V12-fr-musique.mp4",
   "format": "9:16",
   "duree_s": 33.8,
-  "poids_mo": 3.27
+  "poids_mo": 3.29
  },
  "documentaire-en": {
   "source": "V12-en-musique.mp4",
   "format": "9:16",
   "duree_s": 33.8,
-  "poids_mo": 3.24
+  "poids_mo": 3.26
  },
  "fou-fr": {
   "source": "V5-fr-musique.mp4",
@@ -98,20 +98,20 @@
  "teleachat-9x16-fr": {
   "source": "V8-fr-musique.mp4",
   "format": "9:16",
-  "duree_s": 28.5,
-  "poids_mo": 5.22
+  "duree_s": 28.4,
+  "poids_mo": 5.21
  },
  "teleachat-9x16-en": {
   "source": "V8-en-musique.mp4",
   "format": "9:16",
-  "duree_s": 28.5,
-  "poids_mo": 5.12
+  "duree_s": 28.4,
+  "poids_mo": 5.11
  },
  "documentaire-16x9-fr": {
   "source": "V13-fr-musique.mp4",
   "format": "16:9",
   "duree_s": 33.8,
-  "poids_mo": 3.19
+  "poids_mo": 3.2
  },
  "documentaire-16x9-en": {
   "source": "V13-en-musique.mp4",
@@ -122,26 +122,26 @@
  "ytp-16x9-fr": {
   "source": "V15-fr-musique.mp4",
   "format": "16:9",
-  "duree_s": 28.5,
-  "poids_mo": 5.91
+  "duree_s": 28.4,
+  "poids_mo": 5.92
  },
  "ytp-16x9-en": {
   "source": "V15-en-musique.mp4",
   "format": "16:9",
-  "duree_s": 28.5,
-  "poids_mo": 5.82
+  "duree_s": 28.4,
+  "poids_mo": 5.84
  },
  "ytp-9x16-fr": {
   "source": "V14-fr-musique.mp4",
   "format": "9:16",
-  "duree_s": 28.5,
-  "poids_mo": 6.03
+  "duree_s": 28.4,
+  "poids_mo": 6.07
  },
  "ytp-9x16-en": {
   "source": "V14-en-musique.mp4",
   "format": "9:16",
-  "duree_s": 28.5,
-  "poids_mo": 6.06
+  "duree_s": 28.4,
+  "poids_mo": 6.05
  },
  "fou-9x16-fr": {
   "source": "V4-fr-musique.mp4",
@@ -165,30 +165,78 @@
   "source": "V2-en-musique.mp4",
   "format": "9:16",
   "duree_s": 16.0,
-  "poids_mo": 1.22
+  "poids_mo": 1.21
+ },
+ "blanc-16x9-fr": {
+  "source": "V2H-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 16.0,
+  "poids_mo": 1.17
+ },
+ "blanc-16x9-en": {
+  "source": "V2H-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 16.0,
+  "poids_mo": 1.18
+ },
+ "ambiances-16x9-fr": {
+  "source": "V3H-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 17.8,
+  "poids_mo": 1.7
+ },
+ "ambiances-16x9-en": {
+  "source": "V3H-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 17.8,
+  "poids_mo": 1.79
  },
  "diaporama-9x16-fr": {
-  "source": "regeneration-20261116-110917/V16-fr-final-leger.mp4",
+  "source": "V16-fr-final-leger.mp4",
   "format": "9:16",
   "duree_s": 30.2,
-  "poids_mo": 3.13
+  "poids_mo": 3.15
  },
  "diaporama-9x16-en": {
-  "source": "regeneration-20261116-110917/V16-en-final-leger.mp4",
+  "source": "V16-en-final-leger.mp4",
   "format": "9:16",
   "duree_s": 30.2,
-  "poids_mo": 3.12
+  "poids_mo": 3.1
  },
  "diaporama-16x9-fr": {
-  "source": "regeneration-20261116-110917/V17-fr-final-leger.mp4",
+  "source": "V17-fr-final-leger.mp4",
   "format": "16:9",
   "duree_s": 30.2,
-  "poids_mo": 3.44
+  "poids_mo": 3.47
  },
  "diaporama-16x9-en": {
-  "source": "regeneration-20261116-110917/V17-en-final-leger.mp4",
+  "source": "V17-en-final-leger.mp4",
   "format": "16:9",
   "duree_s": 30.2,
-  "poids_mo": 3.37
+  "poids_mo": 3.38
+ },
+ "popups-9x16-fr": {
+  "source": "V18-fr-final.mp4",
+  "format": "9:16",
+  "duree_s": 30.2,
+  "poids_mo": 2.5
+ },
+ "popups-9x16-en": {
+  "source": "V18-en-final.mp4",
+  "format": "9:16",
+  "duree_s": 30.2,
+  "poids_mo": 2.41
+ },
+ "popups-16x9-fr": {
+  "source": "V19-fr-final.mp4",
+  "format": "16:9",
+  "duree_s": 30.2,
+  "poids_mo": 2.56
+ },
+ "popups-16x9-en": {
+  "source": "V19-en-final.mp4",
+  "format": "16:9",
+  "duree_s": 30.2,
+  "poids_mo": 2.5
  }
 }

@@ -72,11 +72,11 @@ ICONE = "omega-player-release/icon.png"
 MOTION = "tools/captures/brut/video/sorties/motion"
 # Dossier du rendu « Diaporama » sous MOTION : a changer quand le nouveau
 # rendu (avec bruitages) arrive, puis relancer medias.py et rendre.py.
-DIAPORAMA = "regeneration-20261116-110917"
+DIAPORAMA = ""   # V16/V17 re-rendus a la racine le 16/11 (29 ambiances)
 VIDEOS = {
     "fiche": ("V0", "musique", 9.0),         # 16:9, la video de la fiche Play
     "addition": ("V1", "musique", 5.6),      # 9:16, « L'addition »
-    "ambiances": ("V3", "musique", 4.6),     # 9:16, « 27 ambiances »
+    "ambiances": ("V3", "musique", 4.6),     # 9:16, « N ambiances » (config.json)
     "film": ("V11", "final-leger", 20.0),    # 16:9, bande-annonce de blockbuster
     "teleachat": ("V9", "musique", 3.2),     # 16:9, tele-achat VHS
     "documentaire": ("V12", "musique", 9.0), # 9:16, documentaire animalier
@@ -99,6 +99,10 @@ VIDEOS = {
     # nomme par DIAPORAMA juste au-dessus de VIDEOS (chaine vide = racine de MOTION).
     "diaporama-9x16": (f"{DIAPORAMA}/V16".lstrip("/"), "final-leger", 15.0),
     "diaporama-16x9": (f"{DIAPORAMA}/V17".lstrip("/"), "final-leger", 15.0),
+    # « Pop-ups », version soft (V18 9:16 / V19 16:9) : 9e emplacement du rail. La version
+    # osee (V20/V21) ne va jamais sur le site.
+    "popups-9x16": ("V18", "final", 3.0),
+    "popups-16x9": ("V19", "final", 3.0),
 }
 LANGUES_VIDEO = ["fr", "en"]
 COTE = 720            # petit cote de la version web

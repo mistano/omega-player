@@ -28,7 +28,7 @@ PLAY = "https://play.google.com/store/apps/details?id=com.mistano.omegaplayer&hl
 # Nombre d'ambiances affiche par les textes : le jeton {ambiances} des i18n/*.json est remplace
 # par cette valeur a la construction. Seul endroit a changer quand le catalogue change
 # (puis relancer ce script). L'outil de regeneration des videos la tient a jour.
-AMBIANCES = 27
+AMBIANCES = 29
 LANGUES = ["en", "fr", "de", "es", "it", "pt", "ru", "ar", "ja", "ko", "zh"]
 HL = {"zh": "zh-CN", "pt": "pt-PT"}
 BALISE_LANG = {"zh": "zh-Hans"}
@@ -52,7 +52,8 @@ BOBINES = [("blanc-16x9", "v_blanc", "blanc", "v_blanc", "calm"),
            ("teleachat", "v_teleachat", "teleachat-9x16", "v_teleachat", "wild"),
            ("documentaire-16x9", "v_documentaire", "documentaire", "v_documentaire", "wild"),
            ("ytp-16x9", "v_ytp", "ytp-9x16", "v_ytp", "wild"),
-           ("diaporama-16x9", "v_diaporama", "diaporama-9x16", "v_diaporama", "wild")]
+           ("diaporama-16x9", "v_diaporama", "diaporama-9x16", "v_diaporama", "wild"),
+           ("popups-16x9", "v_popups", "popups-9x16", "v_popups", "wild")]
 
 # Detection au premier passage, sur la page anglaise (racine) seulement : si le
 # visiteur n'a jamais choisi de langue et que son navigateur en prefere une
