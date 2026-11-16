@@ -431,7 +431,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .bob__ton--wild { background: var(--rose); color: #2b0015; box-shadow: none; transform: rotate(-4deg); }
 [dir="rtl"] .bob__ton--wild { transform: rotate(4deg); }
 .bob__titre { display: block; margin-top: .5rem; font: 800 1.15rem/1.2 var(--display); }
-.bob__duree { font: 500 .8rem/1 var(--mono); color: var(--text-3); letter-spacing: .06em; }
+.bob__duree { margin-inline-start: .7rem; font: 500 .8rem/1 var(--mono); color: var(--text-3); letter-spacing: .06em; }
 [dir="rtl"] .film__duree, [dir="rtl"] .bob__lecture { inset: auto 14px 14px auto; }
 /* Format selon l'ecran : uniquement des 16:9 sur ordinateur, uniquement des
    9:16 sous 900 px (le seuil du bandeau de l'addition). Chaque emplacement

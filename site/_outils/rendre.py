@@ -25,6 +25,10 @@ from pathlib import Path
 SITE = Path(__file__).resolve().parent.parent
 URL = "https://mistano.github.io/omega-player/"
 PLAY = "https://play.google.com/store/apps/details?id=com.mistano.omegaplayer&hl="
+# Nombre d'ambiances affiche par les textes : le jeton {ambiances} des i18n/*.json est remplace
+# par cette valeur a la construction. Seul endroit a changer quand le catalogue change
+# (puis relancer ce script). L'outil de regeneration des videos la tient a jour.
+AMBIANCES = 27
 LANGUES = ["en", "fr", "de", "es", "it", "pt", "ru", "ar", "ja", "ko", "zh"]
 HL = {"zh": "zh-CN", "pt": "pt-PT"}
 BALISE_LANG = {"zh": "zh-Hans"}
@@ -239,7 +243,8 @@ def videos(base, ui, t, fiche):
                 f'<span class="bob__image">{image(f"{base}media/{cle}-{ui}", l, h, "")}'
                 f'<i class="bob__lecture" aria-hidden="true"></i></span>'
                 f'<span class="bob__ton bob__ton--{ton}">{html.escape(t["tag_" + ton])}</span>'
-                f'<span class="bob__titre">{html.escape(t[titre])}</span>'
+                # Titre lu par les lecteurs d'ecran seulement : a l'ecran, il devoilerait la DA de la video.
+                f'<span class="sr">{html.escape(t[titre])}</span>'
                 f'<span class="bob__duree">{minutes(d["duree_s"])}</span></a></li>')
     return "".join(principale), "\n".join(cartes)
 
@@ -248,7 +253,8 @@ def page(code, textes, en, nouveautes, fiche):
     manquantes = [k for k in en if k not in textes]
     if manquantes:
         print(f"  {code} : {len(manquantes)} cle(s) en anglais : {', '.join(manquantes)}", file=sys.stderr)
-    t = {**en, **textes}
+    t = {k: v.replace("{ambiances}", str(AMBIANCES)) if isinstance(v, str) else v
+         for k, v in {**en, **textes}.items()}
     base = "" if code == "en" else "../"
     url = URL if code == "en" else f"{URL}{code}/"
     play = PLAY + HL.get(code, code)
