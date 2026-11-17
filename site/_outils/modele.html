@@ -94,9 +94,13 @@
       <h3 class="h3" data-reveal>{{reel_title}}</h3>
       <p data-reveal>{{reel_lead}}</p>
     </div>
-    <ul class="bobines">
+    <div class="rail" data-rail>
+      <ul class="bobines" id="bobines" data-rail-piste>
 {{=bobines}}
-    </ul>
+      </ul>
+      <button type="button" class="rail__fleche rail__fleche--prev" data-rail-prev aria-controls="bobines" aria-label="{{rail_prev}}" title="{{rail_prev}}"><i aria-hidden="true"></i></button>
+      <button type="button" class="rail__fleche rail__fleche--next" data-rail-next aria-controls="bobines" aria-label="{{rail_next}}" title="{{rail_next}}"><i aria-hidden="true"></i></button>
+    </div>
   </section>
 
   <section class="manifesto" id="manifeste" data-words-section>

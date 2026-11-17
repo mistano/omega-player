@@ -332,6 +332,78 @@
     salle.querySelector("[data-salle-fermer]").addEventListener("click", function () { salle.close(); });
   }
 
+  /* Rail de videos : le defilement lateral doit se deviner. Fondu sur le bord
+     ou il reste du contenu (classes fond-g / fond-d, physiques), fleches sur
+     ordinateur (peut-prev / peut-next, logiques : l'arabe est inverse par la
+     feuille de style), et une invitation unique, un aller-retour, a la premiere
+     entree du rail a l'ecran. Mouvement reduit : pas d'invitation, le reste
+     demeure. Le contenu reste atteignable au doigt, a la molette et au clavier. */
+  var rail = document.querySelector("[data-rail]");
+  var piste = rail && rail.querySelector("[data-rail-piste]");
+  if (piste) {
+    var sens = 1, invite = false, majEnCours = false;
+    var sensLu = function () { sens = window.getComputedStyle(piste).direction === "rtl" ? -1 : 1; };
+    var maj = function () {
+      majEnCours = false;
+      if (invite) return;
+      sensLu();
+      var max = piste.scrollWidth - piste.clientWidth, x = Math.abs(piste.scrollLeft);
+      var debut = x > 4, fin = x < max - 4;
+      rail.classList.toggle("peut-prev", debut);
+      rail.classList.toggle("peut-next", fin);
+      rail.classList.toggle("fond-g", sens === 1 ? debut : fin);
+      rail.classList.toggle("fond-d", sens === 1 ? fin : debut);
+    };
+    var planifier = function () { if (!majEnCours) { majEnCours = true; requestAnimationFrame(maj); } };
+    piste.addEventListener("scroll", planifier, { passive: true });
+    window.addEventListener("resize", planifier);
+    maj();
+    var touche = false;
+    var pas = function (dir) {
+      touche = true;
+      sensLu();
+      piste.scrollBy({ left: dir * sens * Math.max(240, piste.clientWidth * 0.8), behavior: reduit ? "auto" : "smooth" });
+    };
+    var bp = rail.querySelector("[data-rail-prev]"), bn = rail.querySelector("[data-rail-next]");
+    if (bp) bp.addEventListener("click", function () { pas(-1); });
+    if (bn) bn.addEventListener("click", function () { pas(1); });
+
+    /* Invitation : une seule fois, annulee au moindre geste du visiteur. */
+    ["pointerdown", "wheel", "touchstart", "keydown"].forEach(function (n) {
+      piste.addEventListener(n, function () { touche = true; }, { passive: true });
+    });
+    var inviter = function () {
+      tous(".bob", piste).forEach(function (c) { c.classList.add("is-in"); });
+      if (reduit || touche || piste.scrollWidth <= piste.clientWidth + 8 || Math.abs(piste.scrollLeft) > 4) return;
+      var amp = Math.min(84, piste.clientWidth * 0.14), duree = 1700, t0 = null;
+      sensLu();
+      invite = true;
+      piste.style.scrollSnapType = "none"; piste.style.scrollBehavior = "auto";
+      var fin = function () {
+        piste.style.scrollSnapType = ""; piste.style.scrollBehavior = "";
+        invite = false; maj();
+      };
+      var image = function (t) {
+        if (touche) { fin(); return; }
+        if (t0 === null) t0 = t;
+        var k = Math.min(1, (t - t0) / duree), s = Math.sin(Math.PI * k);
+        piste.scrollLeft = sens * amp * s * s;
+        if (k < 1) requestAnimationFrame(image); else { piste.scrollLeft = 0; fin(); }
+      };
+      requestAnimationFrame(image);
+    };
+    if ("IntersectionObserver" in window) {
+      var vu = new IntersectionObserver(function (es) {
+        if (!es.some(function (e) { return e.isIntersecting; })) return;
+        vu.disconnect();
+        window.setTimeout(inviter, reduit ? 0 : 900);
+      }, { threshold: 0.45 });
+      vu.observe(piste);
+    } else {
+      tous(".bob", piste).forEach(function (c) { c.classList.add("is-in"); });
+    }
+  }
+
   calme.addEventListener && calme.addEventListener("change", function () { location.reload(); });
   demander();
 })();
