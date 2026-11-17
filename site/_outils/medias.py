@@ -103,6 +103,10 @@ VIDEOS = {
     # osee (V20/V21) ne va jamais sur le site.
     "popups-9x16": ("V18", "final", 3.0),
     "popups-16x9": ("V19", "final", 3.0),
+    # « Le zero fait son cirque » (V6 9:16 / V7 16:9), ajoute le 17/11 : affiche sur
+    # « Total : 0 € » ecrit en telephones.
+    "cirque-9x16": ("V6", "musique", 22.5),
+    "cirque": ("V7", "musique", 22.5),
 }
 LANGUES_VIDEO = ["fr", "en"]
 COTE = 720            # petit cote de la version web

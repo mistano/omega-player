@@ -238,5 +238,29 @@
   "format": "16:9",
   "duree_s": 30.2,
   "poids_mo": 2.5
+ },
+ "cirque-9x16-fr": {
+  "source": "V6-fr-musique.mp4",
+  "format": "9:16",
+  "duree_s": 26.7,
+  "poids_mo": 4.4
+ },
+ "cirque-9x16-en": {
+  "source": "V6-en-musique.mp4",
+  "format": "9:16",
+  "duree_s": 26.7,
+  "poids_mo": 4.38
+ },
+ "cirque-fr": {
+  "source": "V7-fr-musique.mp4",
+  "format": "16:9",
+  "duree_s": 26.7,
+  "poids_mo": 4.2
+ },
+ "cirque-en": {
+  "source": "V7-en-musique.mp4",
+  "format": "16:9",
+  "duree_s": 26.7,
+  "poids_mo": 4.2
  }
 }
