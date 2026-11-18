@@ -191,7 +191,7 @@
      opacity ; en mouvement reduit, meme contenu, pose d'un coup. */
   var panneau = document.querySelector("[data-bill-panel]");
   var compteur = document.querySelector("[data-bill-count]");
-  var piste = document.querySelector("[data-bill-roll]");
+  var rouleau = document.querySelector("[data-bill-roll]");
   var zeroTotal = document.querySelector("[data-bill-zero]");
   var eclat = document.querySelector("[data-bill-eclat]");
   var vus = {}, imprimees = [], file = [], impression = 0;
@@ -206,11 +206,11 @@
     var ligne = panneau && panneau.querySelector('[data-bill-item="' + c + '"]');
     nbVus++;
     if (compteur) compteur.textContent = nbVus;
-    if (!ligne || !piste) return;
+    if (!ligne || !rouleau) return;
     ligne.style.transform = "translateY(" + (imprimees.length * 100) + "%)";
     imprimees.push(ligne);
     ages();
-    piste.style.transform = "translateY(calc(" + (-imprimees.length) + " * var(--lh)))";
+    rouleau.style.transform = "translateY(calc(" + (-imprimees.length) + " * var(--lh)))";
     if (!anime || reduit || !ligne.animate) return;
     /* La ligne sort de la fente un peu plus vite que le papier, l'encre se pose. */
     ligne.animate([{ opacity: 0, transform: "translateY(" + (imprimees.length * 100 - 50) + "%) scaleY(.5)" },

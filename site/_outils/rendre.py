@@ -298,6 +298,7 @@ def page(code, textes, en, nouveautes, fiche):
         "og_image": f"{URL}img/og-{OG.get(code, 'en')}.jpg", "play": html.escape(play),
         "ui": ui, "hreflang": hreflang, "bars": barres(),
         "detect": DETECTION if code == "en" else "",
+        "presse": "fr" if code == "fr" else "en",  # la page presse n'existe qu'en fr et en
         "languages": "\n".join(lien_langue(c, noms[c]) for c in LANGUES),
         "news": "\n".join(blocs), "bill": facture("bill__item"), "receipt": facture(""),
     }
