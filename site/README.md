@@ -11,11 +11,13 @@ Pas de bibliothèque, pas de CDN, pas d'analytics, pas de cookie, polices embarq
 | `<lang>/index.html` | Pages fr, de, es, it, pt, ru, ar, ja, ko, zh — **générées, ne pas éditer** |
 | `404.html` | Page d'erreur (chemins absolus `/omega-player/`, ne s'affiche stylée que sur Pages) |
 | `sdk/index.html` | Page SDK des extensions (anglais, écrite à la main) |
+| `presse/index.html` | Kit presse FR + EN (écrit à la main), avec `omega-player-kit-presse.zip` |
 | `i18n/<lang>.json` | Tous les textes, une seule source par langue |
 | `nouveautes.json` | Nouveautés par version |
 | `_outils/modele.html` | Gabarit des pages (`{{cle}}` échappé, `{{=cle}}` brut) |
 | `_outils/rendre.py` | Génère les pages depuis le gabarit + JSON |
 | `_outils/medias.py` | Régénère images, icônes, images OG, vidéos et affiches |
+| `_outils/presse.py` | Régénère le ZIP du kit presse depuis la galerie Play (fastlane) : `py -I _outils/presse.py --source ../..` |
 | `assets/css/site.css`, `assets/js/site.js` | Style et animations |
 | `img/`, `media/`, `fonts/` | Captures, vidéos, polices woff2 + licences |
 | `.nojekyll` | Désactive Jekyll sur Pages |
@@ -119,4 +121,4 @@ Rien n'a été commité ni publié.
    `gh-pages`, soit utiliser un workflow GitHub Actions « Deploy to Pages » avec `path: site`.
    (Le mode « branche + dossier » de Pages n'accepte que `/` ou `/docs`.)
 3. Commiter, pousser, puis dans *Settings → Pages* activer la source choisie.
-4. Vérifier `https://mistano.github.io/omega-player/`, une page de langue, `sdk/` et une URL inexistante (404).
+4. Vérifier `https://mistano.github.io/omega-player/`, une page de langue, `sdk/`, `presse/` et une URL inexistante (404).
